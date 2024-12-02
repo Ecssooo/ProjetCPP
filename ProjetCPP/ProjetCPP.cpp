@@ -5,22 +5,19 @@
 
 int main(int argc, char* argv[])
 {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(800, 600), "GW");
     //Initialisation
     sf::Clock clock;
 
     sf::CircleShape shape {20, 3};
     shape.setOrigin(20,20);
-    Player player = CreatePlayer(3, 1, shape, sf::Vector2f{0,0});
+    Player player = CreatePlayer(3, 1, shape, sf::Vector2f{300,300});
     sf::Vector2f input {0,0};
 
     //Boucle de jeu
     while (window.isOpen())
     {
         float deltaTime = clock.restart().asSeconds();
-
-        
-
         
         sf::Event event;
         while (window.pollEvent(event))
