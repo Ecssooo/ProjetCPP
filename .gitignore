@@ -40,3 +40,5 @@ cmake-build-*/
 CMakeUserPresets.json
 
 external/*
+ProjetCPP/x64/*
+x64/*
