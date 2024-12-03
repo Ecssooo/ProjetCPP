@@ -163,8 +163,10 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ProjetCPP.cpp" />
     <ClCompile Include="Shoot.cpp" />
+    <ClCompile Include="Math.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Math.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Shoot.h" />
   </ItemGroup>
