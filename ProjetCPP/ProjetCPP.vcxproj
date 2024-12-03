@@ -162,9 +162,11 @@
   <ItemGroup>
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ProjetCPP.cpp" />
+    <ClCompile Include="Shoot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Shoot.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

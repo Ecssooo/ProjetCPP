@@ -1,29 +1,32 @@
 #include "Player.h"
+#include "Shoot.h"
 
-const float pi = 3.14159265358979323846;
+const double pi = 3.14159265358979323846;
 
-Player CreatePlayer(int hp, float speed, sf::CircleShape shape, sf::Vector2f pos, sf::RenderWindow* window)
+Player CreatePlayer(int hp, float speed, sf::CircleShape shape, sf::Vector2f pos, sf::RenderWindow* window, sf::CircleShape bulletShape, float bulletSpeed, float bulletRadius)
 {
     shape.setPosition(pos);
     shape.setOrigin(shape.getRadius(), shape.getRadius());
-    return Player{hp, speed, shape, pos, window};
+    return Player{hp, speed,shape, pos, sf::Vector2f{0,0}, window, std::list<Bullet> {}, bulletShape, bulletSpeed, bulletRadius};
 }
 
 void Player::Move(sf::Vector2f direction, float deltatime)
 {
-    
     if(abs(direction.x) < 0.1f && abs(direction.y) < 0.1f)
     {
-        shape.setFillColor(sf::Color::Red);
         window->draw(shape);
         return;
     }
+
+    
     sf::Vector2f newPos = position;
     newPos += direction * speed * deltatime;
-    shape.setFillColor(sf::Color::White);
     position = ClampPosition(newPos);
     shape.setPosition(position);
+    this->direction = direction;
+    UpdateAllBullet(this->window, this, deltatime);
     LookAt(direction);
+    
     window->draw(shape);
 
 }

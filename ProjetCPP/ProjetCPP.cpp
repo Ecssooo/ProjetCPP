@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Player.h"
+#include "Shoot.h"
 
 
 int main(int argc, char* argv[])
@@ -9,7 +10,7 @@ int main(int argc, char* argv[])
     //Initialisation
     sf::Clock clock;
     
-    Player player = CreatePlayer(3, 1, sf::CircleShape {20, 3}, sf::Vector2f{300,300}, &window);
+    Player player = CreatePlayer(3, 1, sf::CircleShape {20, 3}, sf::Vector2f{300,300}, &window, sf::CircleShape {5}, 30, 5);
 
     sf::Vector2f input {0,0};
 
@@ -27,14 +28,15 @@ int main(int argc, char* argv[])
 
             if(sf::Joystick::isConnected(0))
             {
-
                 input = {sf::Joystick::getAxisPosition(0, sf::Joystick::X),sf::Joystick::getAxisPosition(0, sf::Joystick::Y)};
             }
         }
         
         window.clear();
         //Affichage
+        
         player.Move(input, deltaTime);
+
         
         window.display();
     }
