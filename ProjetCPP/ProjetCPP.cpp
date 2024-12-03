@@ -8,10 +8,9 @@ int main(int argc, char* argv[])
     sf::RenderWindow window(sf::VideoMode(800, 600), "GW");
     //Initialisation
     sf::Clock clock;
+    
+    Player player = CreatePlayer(3, 1, sf::CircleShape {20, 3}, sf::Vector2f{300,300}, &window);
 
-    sf::CircleShape shape {20, 3};
-    shape.setOrigin(20,20);
-    Player player = CreatePlayer(3, 1, shape, sf::Vector2f{300,300});
     sf::Vector2f input {0,0};
 
     //Boucle de jeu
@@ -36,7 +35,6 @@ int main(int argc, char* argv[])
         window.clear();
         //Affichage
         player.Move(input, deltaTime);
-        window.draw(player.shape);
         
         window.display();
     }

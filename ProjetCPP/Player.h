@@ -1,5 +1,6 @@
 #pragma once
-#include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics.hpp>
+
 
 struct Player
 {
@@ -9,9 +10,12 @@ struct Player
     //SFML
     sf::CircleShape shape;
     sf::Vector2f position;
+
+    sf::RenderWindow* window;
     
     void Move(sf::Vector2f direction, float deltatime);
     void LookAt(sf::Vector2f direction);
+    sf::Vector2f ClampPosition(sf::Vector2f position);
 };
 
-Player CreatePlayer(int hp, float speed, sf::CircleShape shape, sf::Vector2f pos);
+Player CreatePlayer(int hp, float speed, sf::CircleShape shape, sf::Vector2f pos, sf::RenderWindow* window);
