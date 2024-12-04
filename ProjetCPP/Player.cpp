@@ -1,17 +1,17 @@
 #include "Player.h"
-#include "Shoot.h"
+#include "Bullet.h"
 #include "Math.h"
 
 const double pi = 3.14159265358979323846;
 
-Player CreatePlayer(int hp, float speed, sf::CircleShape shape, sf::Vector2f pos, sf::RenderWindow* window, sf::CircleShape bulletShape, float bulletSpeed, float bulletRadius)
+Player CreatePlayer(int hp, float speed, sf::CircleShape shape, sf::Vector2f pos, Bullet* bullet, float reloadTime)
 {
     shape.setPosition(pos);
     shape.setOrigin(shape.getRadius(), shape.getRadius());
-    return Player{hp, speed,shape, pos, sf::Vector2f{0,0}, window, std::list<Bullet> {}, bulletShape, bulletSpeed, bulletRadius};
+    return Player{hp, speed,shape, pos, sf::Vector2f{0,0}, bullet, reloadTime};
 }
 
-void Player::Move(sf::Vector2f direction, float deltatime)
+void Player::Move(sf::Vector2f direction, sf::RenderWindow* window, float deltatime)
 {
     if(Magnitude(direction) < 0.3f)
     {
@@ -21,7 +21,7 @@ void Player::Move(sf::Vector2f direction, float deltatime)
     
     sf::Vector2f newPos = position;
     newPos += Normalize(direction) * speed * deltatime;
-    position = ClampPosition(newPos);
+    position = ClampPosition(newPos, window);
     shape.setPosition(position);
     this->direction = direction;
     LookAt(direction);
@@ -34,7 +34,7 @@ void Player::LookAt(sf::Vector2f direction)
     shape.setRotation(atan2(direction.y, direction.x)*180 / pi - 30);
 }
 
-sf::Vector2f Player::ClampPosition(sf::Vector2f position)
+sf::Vector2f Player::ClampPosition(sf::Vector2f position, sf::RenderWindow* window)
 {
     if(position.x < (0 + shape.getRadius()))
     {
@@ -52,4 +52,14 @@ sf::Vector2f Player::ClampPosition(sf::Vector2f position)
     }
 
     return position;
+}
+
+void Player::Shoot(float deltatime)
+{
+    shootSpeedTimer += deltatime;
+    if(this->shootSpeedTimer >= this->reloadTime)
+    {
+        bullets.push_back(CreateBullet(this->bullet, this->position, this->direction));
+        this->shootSpeedTimer = 0;
+    }
 }

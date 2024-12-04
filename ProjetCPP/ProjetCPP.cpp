@@ -1,7 +1,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Player.h"
-#include "Shoot.h"
+#include "Bullet.h"
 
 
 int main(int argc, char* argv[])
@@ -9,8 +9,8 @@ int main(int argc, char* argv[])
     sf::RenderWindow window(sf::VideoMode(1920, 1080), "GW");
     //Initialisation
     sf::Clock clock;
-    
-    Player player = CreatePlayer(3, 50, sf::CircleShape {20, 3}, sf::Vector2f{300,300}, &window, sf::CircleShape {5}, 200, 5);
+    Bullet bullet {400, sf::CircleShape{5}, sf::Color::Red};
+    Player player = CreatePlayer(3, 200, sf::CircleShape {20, 3}, sf::Vector2f{300,300}, &bullet, 0.5f);
 
     sf::Vector2f input {0,0};
 
@@ -39,8 +39,9 @@ int main(int argc, char* argv[])
         window.clear();
         //Affichage
         
-        player.Move(input, deltaTime);
-        UpdateAllBullet(&window, &player, deltaTime);
+        UpdateAllBullet(&window, &player.bullets, deltaTime);
+        player.Move(input, &window, deltaTime);
+        player.Shoot(deltaTime);
         
         window.display();
     }
