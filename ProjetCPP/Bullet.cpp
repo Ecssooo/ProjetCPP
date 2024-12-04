@@ -1,5 +1,5 @@
 #include "Bullet.h"
-#include "Math.h"
+#include "MathUtils.h"
 
 Bullet CreateBullet(Bullet* bullet, sf::Vector2f position, sf::Vector2f direction)
 {
@@ -26,7 +26,7 @@ void UpdateAllBullet(sf::RenderWindow* window, std::list<Bullet>* bullets, float
             return;
         }
         sf::Vector2f newPos = (*it).shape.getPosition();
-        newPos += Normalize((*it).direction) * (*it).speed * deltatime;
+        newPos += IIM::Normalize((*it).direction) * (*it).speed * deltatime;
         (*it).shape.setPosition(newPos);
         
         window->draw((*it).shape);

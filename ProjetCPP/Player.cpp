@@ -1,6 +1,6 @@
 #include "Player.h"
 #include "Bullet.h"
-#include "Math.h"
+#include "MathUtils.h"
 
 const double pi = 3.14159265358979323846;
 
@@ -13,14 +13,14 @@ Player CreatePlayer(int hp, float speed, sf::CircleShape shape, sf::Vector2f pos
 
 void Player::Move(sf::Vector2f direction, sf::RenderWindow* window, float deltatime)
 {
-    if(Magnitude(direction) < 0.3f)
+    if(IIM::GetMagnitude(direction) < 0.3f)
     {
         window->draw(shape);
         return;
     }
     
     sf::Vector2f newPos = position;
-    newPos += Normalize(direction) * speed * deltatime;
+    newPos += IIM::Normalize(direction) * speed * deltatime;
     position = ClampPosition(newPos, window);
     shape.setPosition(position);
     this->direction = direction;
