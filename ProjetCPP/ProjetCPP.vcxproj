@@ -164,8 +164,12 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ProjetCPP.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="ColisionManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="ColisionManager.h" />
     <ClInclude Include="MathUtils.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Bullet.h" />

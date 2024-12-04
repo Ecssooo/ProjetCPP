@@ -1,8 +1,4 @@
 #include "Player.h"
-#include "Bullet.h"
-#include "MathUtils.h"
-
-const double pi = 3.14159265358979323846;
 
 Player CreatePlayer(int hp, float speed, sf::CircleShape shape, sf::Vector2f pos, Bullet* bullet, float reloadTime)
 {
@@ -15,7 +11,6 @@ void Player::Move(sf::Vector2f direction, sf::RenderWindow* window, float deltat
 {
     if(IIM::GetMagnitude(direction) < 0.3f)
     {
-        window->draw(shape);
         return;
     }
     
@@ -25,13 +20,11 @@ void Player::Move(sf::Vector2f direction, sf::RenderWindow* window, float deltat
     shape.setPosition(position);
     this->direction = direction;
     LookAt(direction);
-    
-    window->draw(shape);
 }
 
 void Player::LookAt(sf::Vector2f direction)
 {
-    shape.setRotation(atan2(direction.y, direction.x)*180 / pi - 30);
+    shape.setRotation(IIM::ConvertVectorToDegree(direction,false, false) - 30);
 }
 
 sf::Vector2f Player::ClampPosition(sf::Vector2f position, sf::RenderWindow* window)
@@ -54,12 +47,18 @@ sf::Vector2f Player::ClampPosition(sf::Vector2f position, sf::RenderWindow* wind
     return position;
 }
 
-void Player::Shoot(float deltatime)
+bool Player::CanShoot(float deltatime)
 {
     shootSpeedTimer += deltatime;
-    if(this->shootSpeedTimer >= this->reloadTime)
+    if (IIM::GetMagnitude(this->direction) < 0.3f)
     {
-        bullets.push_back(CreateBullet(this->bullet, this->position, this->direction));
-        this->shootSpeedTimer = 0;
+        return false;
     }
+    return this->shootSpeedTimer >= this->reloadTime;
+}
+
+Bullet Player::Shoot()
+{
+    this->shootSpeedTimer = 0;
+    return CreateBullet(this->bullet, this->position, this->direction);
 }
