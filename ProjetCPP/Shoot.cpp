@@ -1,4 +1,5 @@
 #include "Shoot.h"
+#include "Math.h"
 
 Bullet CreateBullet(Player* player)
 {
@@ -6,6 +7,7 @@ Bullet CreateBullet(Player* player)
     
     newBullet.shape.setFillColor(sf::Color::Red);
     newBullet.shape.setPosition(player->position);
+    newBullet.shape.setOrigin(player->bulletRadius, player->bulletRadius);
     newBullet.shape.setRadius(player->bulletRadius);
 
     return newBullet;
@@ -27,7 +29,7 @@ void UpdateAllBullet(sf::RenderWindow* window, Player* player, float deltatime)
             return;
         }
         sf::Vector2f newPos = (*it).shape.getPosition();
-        newPos += (*it).direction * player->bulletSpeed * deltatime;
+        newPos += Normalize((*it).direction) * player->bulletSpeed * deltatime;
         (*it).shape.setPosition(newPos);
 
         
