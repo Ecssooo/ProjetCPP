@@ -7,7 +7,7 @@ void ParticleSystem::AddParticleToSystem(float lifeDuration)
     int size = rand() % (this->minParticleSize + this->maxParticleSize); 
     particle.shape.setRadius(size);
 
-    float angle = pi * 2.0f * (float)rand() / RAND_MAX;
+    float angle = IIM::PI * 2.0f * (float)rand() / RAND_MAX;
     float distance = this->spawnRadius * sqrt((float)rand() / RAND_MAX);
     float x = this->origin.x + cos(angle) * distance;
     float y = this->origin.y + sin(angle) * distance;
@@ -17,7 +17,6 @@ void ParticleSystem::AddParticleToSystem(float lifeDuration)
     sf::Vector2f dir = sf::Vector2f(cos(angle), sin(angle));
 
     particle.direction = dir;
-
     particle.shape.setFillColor(this->particleColor);
     
     
@@ -89,8 +88,30 @@ void ParticleSystem::UpdateParticleSystem(sf::RenderWindow* window, float deltaT
         
         this->AddParticleToSystem(lifeTime);
     }
-    this->DrawParticleSystem(*window);
+    this->DrawParticleSystem(window);
 }
+
+void UpdateAllSystem(std::list<ParticleSystem>* system, sf::RenderWindow* window, float deltatime)
+{
+    std::list<ParticleSystem>::iterator it = system->begin();
+    while(it != system->end())
+    {
+        (*it).UpdateParticleSystem(window, deltatime);
+        it++;
+    }
+}
+
+void DrawAllSystem(std::list<ParticleSystem>* system, sf::RenderWindow* window)
+{
+    std::list<ParticleSystem>::iterator it = system->begin();
+    while(it != system->end())
+    {
+        (*it).DrawParticleSystem(window);
+        it++;
+    }
+}
+
+
 
 void ParticleSystem::ClearParticleSystem()
 {
@@ -108,12 +129,12 @@ ParticleSystem CreateParticleSystem(float createParticleTime, float minLifeTime,
         origin, spawnRadius, minParticleSize, maxParticleSize, maxParticleSpeed, particleColor};
 }
 
-void ParticleSystem::DrawParticleSystem(sf::RenderWindow& window)
+void ParticleSystem::DrawParticleSystem(sf::RenderWindow* window)
 {
     std::list<Particle>::iterator it = this->allParticle.begin();
     while(it != this->allParticle.end())
     {
-        window.draw((*it).shape);
+        window->draw((*it).shape);
         it++;
     }
 }
@@ -122,16 +143,9 @@ void ParticleSystem::PlayParticleSystem() { this->isPlaying = true; }
 void ParticleSystem::StopParticleSystem() { this->isPlaying = false; }
 bool ParticleSystem::IsParticleSystemPlaying() { return this->isPlaying; }
 
-ParticleSystem CreateRandomSystem()
+ParticleSystem CreatePrefabSystem(sf::Color color, sf::Vector2f pos)
 {
-    
-    int x = rand() % 1920;
-    int y = rand() % 1080;
-
-    int r = rand() % 255;
-    int g = rand() % 255;
-    int b = rand() % 255;
-    ParticleSystem newSystem = CreateParticleSystem(0.1f, 1, 2, sf::Vector2f(x,y),250,1,20,400,5, sf::Color(r,g,b));
+    ParticleSystem newSystem = CreateParticleSystem(0.1f, 1, 2, pos,250,1,20,400,5, color);
     return newSystem;
 }
 

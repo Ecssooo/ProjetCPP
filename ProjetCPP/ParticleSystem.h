@@ -1,8 +1,7 @@
 #pragma once
 #include <list>
 #include <SFML/Graphics.hpp>
-
-const float pi = 3.14159265358979323846;
+#include "MathUtils.h"
 
 struct Particle
 {
@@ -40,11 +39,13 @@ struct ParticleSystem
     void AddParticleToSystem(float lifeDuration);
     void UpdateParticleSystem(sf::RenderWindow* window, float deltaTime);
     void ClearParticleSystem();
-    void DrawParticleSystem(sf::RenderWindow& window);
+    void DrawParticleSystem(sf::RenderWindow* window);
     void PlayParticleSystem();
     void StopParticleSystem();
     bool IsParticleSystemPlaying();
 };
 
+void UpdateAllSystem(std::list<ParticleSystem>* system, sf::RenderWindow* window, float deltatime);
+void DrawAllSystem(std::list<ParticleSystem>* system, sf::RenderWindow* window);
 ParticleSystem CreateParticleSystem(float createParticleTime, float minLifeTime, float maxLifeTime, sf::Vector2f origin, float spawnRadius, int minParticleSize, int maxParticleSize, float maxParticleSpeed, float systemLifeDuration, sf::Color particleColor);
 ParticleSystem CreateRandomSystem();
