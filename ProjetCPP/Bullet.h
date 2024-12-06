@@ -14,7 +14,7 @@ struct Bullet
     bool OutOfBound(sf::RenderWindow* window);
 };
 
-void MoveAllBullet(sf::RenderWindow* window, std::list<Bullet>* bullets, float deltatime);
-void DrawAllBullet(sf::RenderWindow* window, std::list<Bullet>* bullets);
+void MoveAllBullets(sf::RenderWindow* window, std::list<Bullet>* bullets, float deltatime);
+void DrawAllBullets(sf::RenderWindow* window, std::list<Bullet>* bullets);
 
 Bullet CreateBullet(Bullet* bullet, sf::Vector2f position, sf::Vector2f direction);

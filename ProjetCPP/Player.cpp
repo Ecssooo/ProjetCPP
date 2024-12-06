@@ -1,10 +1,10 @@
 #include "Player.h"
 
-Player CreatePlayer(int hp, float speed, sf::CircleShape shape, sf::Vector2f pos, Bullet* bullet, float reloadTime)
+Player CreatePlayer(int id, int hp, float speed, sf::CircleShape shape, sf::Vector2f pos, Bullet* bullet, float reloadTime)
 {
     shape.setPosition(pos);
     shape.setOrigin(shape.getRadius(), shape.getRadius());
-    return Player{hp, speed,shape, pos, sf::Vector2f{0,0}, bullet, reloadTime};
+    return Player{id, hp, speed,shape, pos, sf::Vector2f{0,0}, bullet, reloadTime};
 }
 
 void Player::Move(sf::Vector2f direction, sf::RenderWindow* window, float deltatime)

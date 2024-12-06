@@ -7,6 +7,7 @@
 
 struct Player
 {
+    int id;
     int hp;
     float speed;
     
@@ -27,4 +28,4 @@ struct Player
     Bullet Shoot();
 };
 
-Player CreatePlayer(int hp, float speed, sf::CircleShape shape, sf::Vector2f pos, Bullet* bullet, float reloadTime);
+Player CreatePlayer(int id, int hp, float speed, sf::CircleShape shape, sf::Vector2f pos, Bullet* bullet, float reloadTime);

@@ -13,7 +13,7 @@ Bullet CreateBullet(Bullet* bullet, sf::Vector2f position, sf::Vector2f directio
     return newBullet;
 }
 
-void MoveAllBullet(sf::RenderWindow* window, std::list<Bullet>* bullets, float deltatime)
+void MoveAllBullets(sf::RenderWindow* window, std::list<Bullet>* bullets, float deltatime)
 {
     std::list<Bullet>::iterator it = bullets->begin();
     while (it != bullets->end())
@@ -31,7 +31,7 @@ void MoveAllBullet(sf::RenderWindow* window, std::list<Bullet>* bullets, float d
         }
     }
 }
-void DrawAllBullet(sf::RenderWindow* window, std::list<Bullet>* bullets)
+void DrawAllBullets(sf::RenderWindow* window, std::list<Bullet>* bullets)
 {
     std::list<Bullet>::iterator it = bullets->begin();
     while (it != bullets->end())
