@@ -1,6 +1,6 @@
 #include "ColisionManager.h"
 
-void CheckColision(std::list<Enemy>* enemies, std::vector<Player>* players, std::list<Bullet>* bullets)
+void CheckCollision(std::list<Enemy>* enemies, std::vector<Player>* players, std::list<Bullet>* bullets)
 {
     std::list<Enemy>::iterator it = enemies->begin();
     while (it != enemies->end())
@@ -9,6 +9,18 @@ void CheckColision(std::list<Enemy>* enemies, std::vector<Player>* players, std:
         {
             if ((*it).Touch((*players)[i].position, (*players)[i].shape.getRadius())) {
                 it = enemies->erase(it);
+                (*players)[i].TakeDamage();
+                if ((*players)[i].hp <= 0) {
+                    std::vector<Player>::iterator that = (*players).begin();
+                    for (int i = 0; i < 8; i++) {
+
+                        if (that->id == (*players)[i].id) {
+                            (*players).erase(that);
+                            return;
+                        }
+                        that++;
+                    }
+                }
                 return;
             }
         }
