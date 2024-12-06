@@ -9,13 +9,13 @@
 
 int main(int argc, char* argv[])
 {
-    sf::RenderWindow window(sf::VideoMode(1920, 1080), "GW");
+    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "GW", sf::Style::Fullscreen);
     //Initialisation
     sf::Clock clock;
 
     std::list<Enemy> enemiesTypes{ 
-        Enemy{100, sf::CircleShape {20, 3}, sf::Color::Green, 1.0f },
-        Enemy{150, sf::CircleShape {20, 4}, sf::Color::Green, 1.2f }
+        Enemy{100, sf::CircleShape {20, 3}, sf::Color::Red, 1.0f },
+        Enemy{150, sf::CircleShape {20, 4}, sf::Color::Red, 1.2f }
     };
     std::list<Enemy> enemiesTotal{};
 
@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
 
     std::list<int> JosticksID{0,1,2,3,4,5,6,7};
 
-    std::vector<Player> players = { CreatePlayer(0, 3, 200, sf::CircleShape{ 20, 3 }, sf::Vector2f{ 300,300 }, &bullet, 0.5f) };
+    std::vector<Player> players = { CreatePlayer(0, 3, 200, sf::CircleShape{ 20, 3 }, sf::Vector2f{ 300,300 }, &bullet, 0.5f, jsf::Color::Green) };
     if (GetNbJostick(JosticksID) > 0) InitPlayers(JosticksID, &players, &bullet);
     std::vector<sf::Vector2f> inputs{8, { 0,0 } };
 
@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
             playersPos.push_back(players[i].position);
         }
         MoveAllEnemies(&enemiesTotal, playersPos, deltaTime);
-        CheckColision(&enemiesTotal, &players, &bulletsTotal);
+        CheckCollision(&enemiesTotal, &players, &bulletsTotal);
         
         window.clear();
         //Affichage
@@ -76,6 +76,7 @@ int main(int argc, char* argv[])
         DrawAllBullets(&window, &bulletsTotal);
         for (int i = 0; i < players.size(); i++) {
             window.draw(players[i].shape);
+            players[i].DrawHealth(&window, i);
         }
         
         window.display();

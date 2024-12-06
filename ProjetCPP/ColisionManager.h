@@ -4,4 +4,4 @@
 #include "Player.h"
 
 
-void CheckColision(std::list<Enemy>* enemies, std::vector<Player>* players, std::list<Bullet>* bullets);
+void CheckCollision(std::list<Enemy>* enemies, std::vector<Player>* players, std::list<Bullet>* bullets);

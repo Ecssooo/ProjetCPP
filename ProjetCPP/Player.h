@@ -13,6 +13,7 @@ struct Player
     
     //SFML
     sf::CircleShape shape;
+    sf::Color color = sf::Color::White;
     sf::Vector2f position;
     sf::Vector2f direction;
     
@@ -26,6 +27,8 @@ struct Player
     void LookAt(sf::Vector2f direction);
     bool CanShoot(float deltatime);
     Bullet Shoot();
+    void TakeDamage();
+    void DrawHealth(sf::RenderWindow* window, int offset);
 };
 
-Player CreatePlayer(int id, int hp, float speed, sf::CircleShape shape, sf::Vector2f pos, Bullet* bullet, float reloadTime);
+Player CreatePlayer(int id, int hp, float speed, sf::CircleShape shape, sf::Vector2f pos, Bullet* bullet, float reloadTime, sf::Color color = sf::Color::White);
