@@ -1,37 +1,30 @@
 #include "Player.h"
-#include "Bullet.h"
-#include "Math.h"
 
-const double pi = 3.14159265358979323846;
-
-Player CreatePlayer(int hp, float speed, sf::CircleShape shape, sf::Vector2f pos, Bullet* bullet, float reloadTime)
+Player CreatePlayer(int id, int hp, float speed, sf::CircleShape shape, sf::Vector2f pos, Bullet* bullet, float reloadTime)
 {
     shape.setPosition(pos);
     shape.setOrigin(shape.getRadius(), shape.getRadius());
-    return Player{hp, speed,shape, pos, sf::Vector2f{0,0}, bullet, reloadTime};
+    return Player{id, hp, speed,shape, pos, sf::Vector2f{0,0}, bullet, reloadTime};
 }
 
 void Player::Move(sf::Vector2f direction, sf::RenderWindow* window, float deltatime)
 {
-    if(Magnitude(direction) < 0.3f)
+    if(IIM::GetMagnitude(direction) < 0.3f)
     {
-        window->draw(shape);
         return;
     }
     
     sf::Vector2f newPos = position;
-    newPos += Normalize(direction) * speed * deltatime;
+    newPos += IIM::Normalize(direction) * speed * deltatime;
     position = ClampPosition(newPos, window);
     shape.setPosition(position);
     this->direction = direction;
     LookAt(direction);
-    
-    window->draw(shape);
 }
 
 void Player::LookAt(sf::Vector2f direction)
 {
-    shape.setRotation(atan2(direction.y, direction.x)*180 / pi - 30);
+    shape.setRotation(IIM::ConvertVectorToDegree(direction,false, false) - 30);
 }
 
 sf::Vector2f Player::ClampPosition(sf::Vector2f position, sf::RenderWindow* window)
@@ -54,12 +47,18 @@ sf::Vector2f Player::ClampPosition(sf::Vector2f position, sf::RenderWindow* wind
     return position;
 }
 
-void Player::Shoot(float deltatime)
+bool Player::CanShoot(float deltatime)
 {
     shootSpeedTimer += deltatime;
-    if(this->shootSpeedTimer >= this->reloadTime)
+    if (IIM::GetMagnitude(this->direction) < 0.3f)
     {
-        bullets.push_back(CreateBullet(this->bullet, this->position, this->direction));
-        this->shootSpeedTimer = 0;
+        return false;
     }
+    return this->shootSpeedTimer >= this->reloadTime;
+}
+
+Bullet Player::Shoot()
+{
+    this->shootSpeedTimer = 0;
+    return CreateBullet(this->bullet, this->position, this->direction);
 }

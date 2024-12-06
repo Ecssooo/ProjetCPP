@@ -1,5 +1,4 @@
 #include "Bullet.h"
-#include "Math.h"
 
 Bullet CreateBullet(Bullet* bullet, sf::Vector2f position, sf::Vector2f direction)
 {
@@ -8,32 +7,38 @@ Bullet CreateBullet(Bullet* bullet, sf::Vector2f position, sf::Vector2f directio
     newBullet.shape.setFillColor(bullet->color);
     newBullet.shape.setPosition(position);
     newBullet.shape.setOrigin(bullet->shape.getRadius(), bullet->shape.getRadius());
+    newBullet.position = position;
     newBullet.direction = direction;
 
     return newBullet;
 }
 
-
-
-void UpdateAllBullet(sf::RenderWindow* window, std::list<Bullet>* bullets, float deltatime)
+void MoveAllBullets(sf::RenderWindow* window, std::list<Bullet>* bullets, float deltatime)
 {
     std::list<Bullet>::iterator it = bullets->begin();
-    while(it != bullets->end())
+    while (it != bullets->end())
     {
-        if((*it).OutOfBound(window))
+        sf::Vector2f newPos = (*it).shape.getPosition();
+        newPos += IIM::Normalize((*it).direction) * (*it).speed * deltatime;
+        (*it).shape.setPosition(newPos);
+        (*it).position = newPos;
+        if ((*it).OutOfBound(window))
         {
             it = bullets->erase(it);
-            return;
         }
-        sf::Vector2f newPos = (*it).shape.getPosition();
-        newPos += Normalize((*it).direction) * (*it).speed * deltatime;
-        (*it).shape.setPosition(newPos);
-        
+        else {
+            it++;
+        }
+    }
+}
+void DrawAllBullets(sf::RenderWindow* window, std::list<Bullet>* bullets)
+{
+    std::list<Bullet>::iterator it = bullets->begin();
+    while (it != bullets->end())
+    {
         window->draw((*it).shape);
         it++;
     }
-       
-    
 }
 
 bool Bullet::OutOfBound(sf::RenderWindow* window)

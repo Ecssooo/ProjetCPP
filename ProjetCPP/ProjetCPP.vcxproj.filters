@@ -21,10 +21,19 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Shoot.cpp">
+    <ClCompile Include="Bullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Math.cpp">
+    <ClCompile Include="MathUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ColisionManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Multiplayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,10 +41,19 @@
     <ClInclude Include="Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Shoot.h">
+    <ClInclude Include="Bullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Math.h">
+    <ClInclude Include="MathUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ColisionManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Multiplayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

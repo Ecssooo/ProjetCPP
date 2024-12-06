@@ -160,13 +160,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="MathUtils.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ProjetCPP.cpp" />
     <ClCompile Include="Bullet.cpp" />
-    <ClCompile Include="Math.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="ColisionManager.cpp" />
+    <ClCompile Include="Multiplayer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Math.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="ColisionManager.h" />
+    <ClInclude Include="Multiplayer.h" />
+    <ClInclude Include="MathUtils.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Bullet.h" />
   </ItemGroup>
