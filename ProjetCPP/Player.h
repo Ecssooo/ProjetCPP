@@ -4,6 +4,13 @@
 #include "Bullet.h"
 #include "MathUtils.h"
 
+enum class PLAYERSTATES
+{
+    NOTREADY,
+    READY,
+    ALIVE,
+    DEAD
+};
 
 struct Player
 {
@@ -21,6 +28,7 @@ struct Player
     Bullet* bullet;
     float reloadTime;
     float shootSpeedTimer = 0;
+    PLAYERSTATES playerStates = PLAYERSTATES::NOTREADY;
     
     void Move(sf::Vector2f direction, sf::RenderWindow* window, float deltatime);
     sf::Vector2f ClampPosition(sf::Vector2f position, sf::RenderWindow* window);

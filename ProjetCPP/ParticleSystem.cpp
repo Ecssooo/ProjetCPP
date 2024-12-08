@@ -24,7 +24,7 @@ void ParticleSystem::AddParticleToSystem(float lifeDuration)
 }
 
 
-void ParticleSystem::UpdateParticleSystem(sf::RenderWindow* window, float deltaTime)
+int ParticleSystem::UpdateParticleSystem(sf::RenderWindow* window, float deltaTime)
 {
 
     //Update System life time;
@@ -34,7 +34,7 @@ void ParticleSystem::UpdateParticleSystem(sf::RenderWindow* window, float deltaT
     {
         StopParticleSystem();
         this->ClearParticleSystem();
-        return;
+        return 1;
     }
 
     this->createNewSystem += deltaTime;
@@ -53,7 +53,7 @@ void ParticleSystem::UpdateParticleSystem(sf::RenderWindow* window, float deltaT
         
         //Update
             //Scale
-        float scale = sin(pi * ((*it).lifeTime/(*it).lifeDuration));
+        float scale = sin(IIM::PI * ((*it).lifeTime/(*it).lifeDuration));
         (*it).shape.setScale(scale,scale);
 
             //Position
@@ -89,19 +89,26 @@ void ParticleSystem::UpdateParticleSystem(sf::RenderWindow* window, float deltaT
         this->AddParticleToSystem(lifeTime);
     }
     this->DrawParticleSystem(window);
+    return 0;
 }
 
-void UpdateAllSystem(std::list<ParticleSystem>* system, sf::RenderWindow* window, float deltatime)
+void UpdateAllParticleSystem(std::list<ParticleSystem>* systems, sf::RenderWindow* window, float deltatime)
 {
-    std::list<ParticleSystem>::iterator it = system->begin();
-    while(it != system->end())
+    std::list<ParticleSystem>::iterator it = systems->begin();
+    while(it != systems->end())
     {
-        (*it).UpdateParticleSystem(window, deltatime);
-        it++;
+        int systemsState = (*it).UpdateParticleSystem(window, deltatime);
+        if(systemsState == 1)
+        {
+            it = systems->erase(it);
+        }
+        if(it != systems->end())
+        {
+            it++;
+        }
     }
 }
-
-void DrawAllSystem(std::list<ParticleSystem>* system, sf::RenderWindow* window)
+void DrawAllParticleSystem(sf::RenderWindow* window, std::list<ParticleSystem>* system)
 {
     std::list<ParticleSystem>::iterator it = system->begin();
     while(it != system->end())
@@ -145,7 +152,7 @@ bool ParticleSystem::IsParticleSystemPlaying() { return this->isPlaying; }
 
 ParticleSystem CreatePrefabSystem(sf::Color color, sf::Vector2f pos)
 {
-    ParticleSystem newSystem = CreateParticleSystem(0.1f, 1, 2, pos,250,1,20,400,5, color);
+    ParticleSystem newSystem = CreateParticleSystem(0.001f, 0.1f, 0.3f, pos,20,1,4,700,0.3f, color);
     return newSystem;
 }
 

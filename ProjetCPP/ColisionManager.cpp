@@ -1,6 +1,6 @@
 #include "ColisionManager.h"
 
-void CheckCollision(std::list<Enemy>* enemies, std::vector<Player>* players, std::list<Bullet>* bullets)
+void CheckCollision(std::list<Enemy>* enemies, std::list<ParticleSystem>* particleSystems, std::vector<Player>* players, std::list<Bullet>* bullets)
 {
     std::list<Enemy>::iterator it = enemies->begin();
     while (it != enemies->end())
@@ -28,6 +28,7 @@ void CheckCollision(std::list<Enemy>* enemies, std::vector<Player>* players, std
         while (with != bullets->end())
         {
             if ((*it).Touch(with->position, with->shape.getRadius())) {
+                particleSystems->push_back(CreatePrefabSystem((*it).color, (*it).position));
                 it = enemies->erase(it);
                 bullets->erase(with);
                 return;

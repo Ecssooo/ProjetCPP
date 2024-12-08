@@ -160,6 +160,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="MathUtils.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -172,6 +173,7 @@
   <ItemGroup>
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="ColisionManager.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="Multiplayer.h" />
     <ClInclude Include="MathUtils.h" />
     <ClInclude Include="ParticleSystem.h" />

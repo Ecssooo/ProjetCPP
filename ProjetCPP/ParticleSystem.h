@@ -33,11 +33,11 @@ struct ParticleSystem
     
     float systemLifeTime = 0;
     float createNewSystem = 0;
-    bool isPlaying = false;
+    bool isPlaying = true;
     
     //Method
     void AddParticleToSystem(float lifeDuration);
-    void UpdateParticleSystem(sf::RenderWindow* window, float deltaTime);
+    int UpdateParticleSystem(sf::RenderWindow* window, float deltaTime);
     void ClearParticleSystem();
     void DrawParticleSystem(sf::RenderWindow* window);
     void PlayParticleSystem();
@@ -45,7 +45,8 @@ struct ParticleSystem
     bool IsParticleSystemPlaying();
 };
 
-void UpdateAllSystem(std::list<ParticleSystem>* system, sf::RenderWindow* window, float deltatime);
-void DrawAllSystem(std::list<ParticleSystem>* system, sf::RenderWindow* window);
+void UpdateAllParticleSystem(std::list<ParticleSystem>* system, sf::RenderWindow* window, float deltatime);
+void DrawAllParticleSystem(sf::RenderWindow* window, std::list<ParticleSystem>* system);
 ParticleSystem CreateParticleSystem(float createParticleTime, float minLifeTime, float maxLifeTime, sf::Vector2f origin, float spawnRadius, int minParticleSize, int maxParticleSize, float maxParticleSpeed, float systemLifeDuration, sf::Color particleColor);
 ParticleSystem CreateRandomSystem();
+ParticleSystem CreatePrefabSystem(sf::Color color, sf::Vector2f pos);

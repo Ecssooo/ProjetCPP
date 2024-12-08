@@ -80,3 +80,19 @@ void GetInputs(std::list<int> JosticksID, std::vector<sf::Vector2f>* inputs) {
         it++;
     }
 }
+
+int GetReadyInputs(std::list<int> JosticksID, std::vector<Player>* players)
+{
+    int playersReady = 0;
+    std::list<int>::iterator joystickIterator = JosticksID.begin();
+    while(joystickIterator != JosticksID.end())
+    {
+        if(sf::Joystick::isButtonPressed((*joystickIterator),0))
+        {
+            (*players)[(*joystickIterator)].playerStates = PLAYERSTATES::READY;
+            playersReady++;
+        }
+        joystickIterator++;
+    }
+    return playersReady;
+}
