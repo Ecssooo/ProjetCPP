@@ -70,3 +70,7 @@ void DrawBaseLife(Base* base, sf::RenderWindow* window) {
 void BaseTakeDamage(Base* base) {
 	base->hp -= 1;
 }
+
+bool isBaseAlive(Base* base) {
+	return base->hp <= 0;
+}

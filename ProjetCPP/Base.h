@@ -18,6 +18,7 @@ struct Base {
 	
 };
 
+bool IsBaseAlive(Base* base);
 void DrawBase(Base* base, sf::RenderWindow* window);
 void DrawBaseLife(Base* base, sf::RenderWindow* window);
 void BaseTakeDamage(Base* base);
