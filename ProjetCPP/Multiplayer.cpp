@@ -1,15 +1,18 @@
 #include "Multiplayer.h"
 
-std::vector<sf::Color> colorList = {
-    sf::Color::Green,
-    sf::Color::Blue,
-    sf::Color::Yellow,
-    sf::Color::Magenta,
-    sf::Color::Cyan,
-    sf::Color(226, 133, 110, 255), 
-    sf::Color(236, 240, 241, 255),
-    sf::Color(97, 155, 138, 255) 
-};
+sf::Color PlayerColor(int id) {
+    std::vector<sf::Color> ColorList = {
+        sf::Color::Green,
+        sf::Color::Blue,
+        sf::Color::Yellow,
+        sf::Color::Magenta,
+        sf::Color::Cyan,
+        sf::Color(226, 133, 110, 255),
+        sf::Color(236, 240, 241, 255),
+        sf::Color(97, 155, 138, 255)
+    };
+    return ColorList[id];
+}
 
 int GetNbJostick(std::list<int> JosticksID) {
     std::list<int>::iterator it = JosticksID.begin();
@@ -31,7 +34,7 @@ void InitPlayers(std::list<int> JosticksID, std::vector<Player>* players, Bullet
     while (it != JosticksID.end()) {
         if (sf::Joystick::isConnected(*it)) {
             float pos = 100.f * (*it) + 300.f;
-            (*players).push_back(CreatePlayer((*it), 3, 200, sf::CircleShape{ 20, 3 }, sf::Vector2f{ pos ,300 }, bullet, 0.5f, colorList[i]));
+            (*players).push_back(CreatePlayer((*it), 3, 200, sf::CircleShape{ 20, 3 }, sf::Vector2f{ pos ,300 }, bullet, 0.5f, PlayerColor(i)));
         }
         i++;
         it++;
@@ -44,7 +47,7 @@ void CheckJoystick(std::list<int> JosticksID, std::vector<sf::Vector2f>* inputs,
     while (it != JosticksID.end()) {
         if (sf::Joystick::isConnected(*it) && !CheckPlayerExist((*it), players) && (*it) != 0) {
             float pos = 100.f * (*it) + 300.f;
-            (*players).push_back(CreatePlayer((*it), 3, 200, sf::CircleShape{ 20, 3 }, sf::Vector2f{ pos,300 }, bullet, 0.5f, colorList[i]));
+            (*players).push_back(CreatePlayer((*it), 3, 200, sf::CircleShape{ 20, 3 }, sf::Vector2f{ pos,300 }, bullet, 0.5f, PlayerColor(i)));
         }
         else if (!sf::Joystick::isConnected(*it) && CheckPlayerExist((*it), players) && (*it) != 0) {
             std::vector<Player>::iterator that = (*players).begin();

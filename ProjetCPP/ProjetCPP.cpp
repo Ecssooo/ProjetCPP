@@ -30,13 +30,14 @@ int main(int argc, char* argv[])
 
     std::list<int> JosticksID{0,1,2,3,4,5,6,7};
 
-    std::vector<Player> players = { CreatePlayer(0, 3, 200, sf::CircleShape{ 20, 3 }, sf::Vector2f{ 300,300 }, &bullet, 0.5f, sf::Color::Green) };
+    std::vector<Player> players = { CreatePlayer(0, 3, 200, sf::CircleShape{ 20, 3 }, sf::Vector2f{ 300,300 }, &bullet, 0.5f, PlayerColor(0))};
     if (GetNbJostick(JosticksID) > 0) InitPlayers(JosticksID, &players, &bullet);
     std::vector<sf::Vector2f> inputs{8, { 0,0 } };
     std::vector<sf::Vector2f> playersPos {};
     
 
     int playersReady = 0;
+    bool GamePause = true;
 
     //Boucle de jeu
     while (window.isOpen())
@@ -49,49 +50,54 @@ int main(int argc, char* argv[])
                 gameStates = GAMESTATES::START;
                 break;
             case(GAMESTATES::START):
+                GamePause = true;
 
-                    //Input
+                //Input
+                if (GetNbJostick(JosticksID) > 0)
+                {
                     playersReady = GetReadyInputs(JosticksID, &players);
-            
-                    //Update
-                    for (int i = 0; i < players.size(); i++) {
-                        if(players[i].playerStates == PLAYERSTATES::READY){
-                            playersReady++;
-                        }
-                    }
-                
-                    if(playersReady == players.size())
+                }
+                if (!sf::Joystick::isConnected(0)) {
+                    sf::Event event;
+                    while (window.pollEvent(event))
                     {
-                        for (int i = 0; i < players.size(); i++){
-                            players[i].playerStates = PLAYERSTATES::ALIVE;
+                        if ((event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space)) {
+                            players[0].playerStates = PLAYERSTATES::READY;
                         }
-                        gameStates = GAMESTATES::ROUNDINPROGRESS;
                     }
+                }
 
-                    //Draw
+                //Update
+                for (int i = 0; i < players.size(); i++) {
+                    if (players[i].playerStates == PLAYERSTATES::READY) {
+                        playersReady++;
+                    }
+                }
+
+                if (playersReady == players.size())
+                {
+                    for (int i = 0; i < players.size(); i++) {
+                        players[i].playerStates = PLAYERSTATES::ALIVE;
+                    }
+                    gameStates = GAMESTATES::ROUNDINPROGRESS;
+                }
+
                 break;
             case(GAMESTATES::PAUSE):
+                GamePause = true;
+                window.close();
                 break;
             case(GAMESTATES::END):
+                GamePause = true;
                 window.close();
                 break;
             case(GAMESTATES::ROUNDINPROGRESS):
-                
-                if (GetNbJostick(JosticksID) > 0)
-                {
-                    CheckJoystick(JosticksID, &inputs, &players, &bullet);
-                    GetInputs(JosticksID, &inputs);
-                }
-                if (!sf::Joystick::isConnected(0)) {
-                    sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-                    inputs[0] = { mousePosition.x - players[0].position.x, mousePosition.y - players[0].position.y };
-                }
+                GamePause = false;
 
                 //Update
                 for (int i = 0; i < players.size(); i++) {
                     if(players[i].playerStates == PLAYERSTATES::ALIVE)
                     {
-                        players[i].Move(inputs[players[i].id], &window, deltaTime);
                         if (players[i].CanShoot(deltaTime)) {
                             bulletsTotal.push_back(players[i].Shoot());
                         }
@@ -106,63 +112,66 @@ int main(int argc, char* argv[])
                 }
                 MoveAllEnemies(&enemiesTotal, playersPos, deltaTime);
                 CheckCollision(&enemiesTotal, &particleSystems, &players, &bulletsTotal);
-                UpdateAllParticleSystem(&particleSystems, &window, deltaTime);
 
                 if(PlayerAlive(&players) == players.size())
                 {
-                    gameStates = GAMESTATES::END;
+                    gameStates = GAMESTATES::REVIVE;
                 }
                 
                 break;
             case(GAMESTATES::REVIVE):
-                if (GetNbJostick(JosticksID) > 0)
-                {
-                    CheckJoystick(JosticksID, &inputs, &players, &bullet);
-                    GetInputs(JosticksID, &inputs);
+                GamePause = false;
+                enemiesTotal.clear();
+                for (int i = 0; i < players.size(); i++) {
+                    if (players[i].playerStates == PLAYERSTATES::DEAD)
+                    {
+                        players[i].playerStates = PLAYERSTATES::ALIVE;
+                        players[i].hp = 3;
+                    }
                 }
-                if (!sf::Joystick::isConnected(0)) {
-                    sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-                    inputs[0] = { mousePosition.x - players[0].position.x, mousePosition.y - players[0].position.y };
-                }
+                gameStates = GAMESTATES::ROUNDINPROGRESS;
 
-                //Update
-                for (int i = 0; i < players.size(); i++) {
-                    players[i].Move(inputs[players[i].id], &window, deltaTime);
-                }
-            
-                for (int i = 0; i < players.size(); i++) {
-                    playersPos.push_back(players[i].position);
-                }
-                UpdateAllParticleSystem(&particleSystems, &window, deltaTime);
-            
                 break;
         }
-        
-        
-        //Input
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if ((event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)) {
-                window.close();
-            }
-        }
-
-        playersPos = {};
-        
-        window.clear();
-        //Affichage
-        DrawAllEnemies(&enemiesTotal, &window);
-        DrawAllBullets(&window, &bulletsTotal);
-        DrawAllParticleSystem(&window, &particleSystems);
-        for (int i = 0; i < players.size(); i++) {
-            if(players[i].playerStates != PLAYERSTATES::DEAD)
+        if (GamePause == false) {
+            //Input
+            playersPos = {};
+            sf::Event event;
+            while (window.pollEvent(event))
             {
-                window.draw(players[i].shape);
-                players[i].DrawHealth(&window, i);
+                if ((event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)) {
+                    gameStates = GAMESTATES::PAUSE;
+                }
             }
+            if (GetNbJostick(JosticksID) > 0)
+            {
+                CheckJoystick(JosticksID, &inputs, &players, &bullet);
+                GetInputs(JosticksID, &inputs);
+            }
+            if (!sf::Joystick::isConnected(0)) {
+                sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+                inputs[0] = { mousePosition.x - players[0].position.x, mousePosition.y - players[0].position.y };
+            }
+
+            //Update
+            MoveAllPlayers(&players, inputs, & window, deltaTime);
+
+            for (int i = 0; i < players.size(); i++) {
+                playersPos.push_back(players[i].position);
+            }
+            UpdateAllParticleSystem(&particleSystems, &window, deltaTime);
+
+            //Affichage
+            window.clear();
+            DrawAllEnemies(&enemiesTotal, &window);
+            DrawAllBullets(&window, &bulletsTotal);
+            DrawAllParticleSystem(&window, &particleSystems);
+            DrawAllPlayers(&players, &window);
         }
-        
+        else {
+            //Affichage
+            window.clear();
+        }
         window.display();
     }
 

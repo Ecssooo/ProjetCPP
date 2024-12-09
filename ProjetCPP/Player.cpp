@@ -8,9 +8,26 @@ Player CreatePlayer(int id, int hp, float speed, sf::CircleShape shape, sf::Vect
     return Player{id, hp, speed,shape, color ,pos, sf::Vector2f{0,0}, bullet, reloadTime};
 }
 
+void MoveAllPlayers(std::vector<Player>* players, std::vector<sf::Vector2f> directions, sf::RenderWindow* window, float deltatime)
+{
+    for (int i = 0; i < (*players).size(); i++) {
+        (*players)[i].Move(directions[(*players)[i].id], window, deltatime);
+    }
+}
+void DrawAllPlayers(std::vector<Player>* players, sf::RenderWindow* window)
+{
+    for (int i = 0; i < (*players).size(); i++) {
+        if ((*players)[i].playerStates != PLAYERSTATES::DEAD)
+        {
+            window->draw((*players)[i].shape);
+            (*players)[i].DrawHealth(window, i);
+        }
+    }
+}
+
 void Player::Move(sf::Vector2f direction, sf::RenderWindow* window, float deltatime)
 {
-    if(IIM::GetMagnitude(direction) < 0.3f)
+    if(IIM::GetMagnitude(direction) < 0.3f || playerStates != PLAYERSTATES::ALIVE)
     {
         return;
     }
@@ -51,7 +68,7 @@ sf::Vector2f Player::ClampPosition(sf::Vector2f position, sf::RenderWindow* wind
 bool Player::CanShoot(float deltatime)
 {
     shootSpeedTimer += deltatime;
-    if (IIM::GetMagnitude(this->direction) < 0.3f)
+    if (IIM::GetMagnitude(this->direction) < 0.3f || playerStates != PLAYERSTATES::ALIVE)
     {
         return false;
     }

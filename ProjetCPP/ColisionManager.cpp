@@ -11,15 +11,8 @@ void CheckCollision(std::list<Enemy>* enemies, std::list<ParticleSystem>* partic
                 it = enemies->erase(it);
                 (*players)[i].TakeDamage();
                 if ((*players)[i].hp <= 0) {
-                    std::vector<Player>::iterator that = (*players).begin();
-                    for (int i = 0; i < 8; i++) {
-
-                        if (that->id == (*players)[i].id) {
-                            (*players).erase(that);
-                            return;
-                        }
-                        that++;
-                    }
+                    particleSystems->push_back(CreatePrefabSystem((*players)[i].color, (*players)[i].position));
+                    (*players)[i].playerStates = PLAYERSTATES::DEAD;
                 }
                 return;
             }

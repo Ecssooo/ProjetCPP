@@ -3,6 +3,8 @@
 #include "SFML/Graphics.hpp"
 #include "player.h"
 
+sf::Color PlayerColor(int id);
+
 int GetNbJostick(std::list<int> JosticksID);
 
 void InitPlayers(std::list<int> JosticksID, std::vector<Player>* players, Bullet* bullet);

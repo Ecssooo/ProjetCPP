@@ -1,5 +1,6 @@
 #pragma once
 #include <list>
+#include <vector>
 #include <SFML/Graphics.hpp>
 #include "Bullet.h"
 #include "MathUtils.h"
@@ -39,4 +40,6 @@ struct Player
     void DrawHealth(sf::RenderWindow* window, int offset);
 };
 
+void MoveAllPlayers(std::vector<Player>* players, std::vector<sf::Vector2f> directions, sf::RenderWindow* window, float deltatime);
+void DrawAllPlayers(std::vector<Player>* players, sf::RenderWindow* window);
 Player CreatePlayer(int id, int hp, float speed, sf::CircleShape shape, sf::Vector2f pos, Bullet* bullet, float reloadTime, sf::Color color = sf::Color::White);
