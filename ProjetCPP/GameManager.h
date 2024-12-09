@@ -11,4 +11,5 @@ enum class GAMESTATES
     REVIVE
 };
 
-int PlayerAlive(std::vector<Player>* players);
+int PlayersDead(std::vector<Player>* players);
+bool Timer(float deltatime, float* currentTimer, float maxTimer);
