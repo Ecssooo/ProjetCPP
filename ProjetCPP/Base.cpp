@@ -51,14 +51,14 @@ sf::RectangleShape SetLifeBars(sf::Color color, float length, sf::RenderWindow* 
 	sf::RectangleShape shape;
 	shape.setSize(sf::Vector2f{ length, (float)(window->getSize().y / 20) });
 	shape.setFillColor(color);
-	shape.setPosition(sf::Vector2f{ 0, 0 });
+	shape.setPosition(sf::Vector2f{ 0, (float)window->getSize().y - shape.getSize().y});
 	return shape;
 }
 
 void DrawBaseLife(Base* base, sf::RenderWindow* window) {
 	sf::RectangleShape allHp;
 	sf::RectangleShape remainingHp;
-	allHp = SetLifeBars(sf::Color::Red, 1980, window);
+	allHp = SetLifeBars(sf::Color::Red, (float)window->getSize().x, window);
 	float percentageLife = (float)window->getSize().x / (float)base->maxHp;
 	float length = percentageLife * base->hp;
 	std::cout << base->hp << std::endl;

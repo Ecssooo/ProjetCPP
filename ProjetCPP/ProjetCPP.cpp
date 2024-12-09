@@ -14,7 +14,7 @@
 int main(int argc, char* argv[])
 {
     srand(time(NULL));
-    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "GW", sf::Style::Fullscreen);
+    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "GW");
     //Initialisation
     sf::Clock clock;
 
@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
                 //Input
                 if (GetNbJostick(JosticksID) > 0)
                 {
-                    playersReady = GetReadyInputs(JosticksID, &players);
+                    GetReadyInputs(JosticksID, &players);
                 }
                 if (!sf::Joystick::isConnected(0)) {
                     sf::Event event;
@@ -81,6 +81,7 @@ int main(int argc, char* argv[])
                 }
 
                 //Update
+                playersReady = 0;
                 for (int i = 0; i < players.size(); i++) {
                     if (players[i].playerStates == PLAYERSTATES::READY) {
                         playersReady++;
@@ -94,7 +95,6 @@ int main(int argc, char* argv[])
                 }
                 break;
             case(GAMESTATES::ROUNDINPROGRESS):
-                GamePause = false;
 
                 if(Timer(deltaTime, &currentTimer, 10))
                 {
@@ -113,16 +113,15 @@ int main(int argc, char* argv[])
             
                 MoveAllBullets(&window, &bulletsTotal, deltaTime);
 
-                SpawnEnemies(&enemiesTotal, &enemiesTypes, {0,0}, &window, deltaTime);
+                SpawnEnemies(&enemiesTotal, &enemiesTypes, base.position, &window, deltaTime);
                 for (int i = 0; i < players.size(); i++) {
                     playersPos.push_back(players[i].position);
                 }
-                MoveAllEnemies(&enemiesTotal, {0,0}, playersPos, deltaTime);
+                MoveAllEnemies(&enemiesTotal, base.position, playersPos, deltaTime);
                 CheckCollision(&enemiesTotal, &particleSystems, &players, &bulletsTotal);
             
                 break;
             case(GAMESTATES::REVIVE):
-                GamePause = false;
                 enemiesTotal.clear();
 
                 if(Timer(deltaTime, &currentTimer, 10))
@@ -138,7 +137,6 @@ int main(int argc, char* argv[])
                         players[i].hp = 3;
                     }
                 }
-                gameStates = GAMESTATES::ROUNDINPROGRESS;
 
                 break;
         }
@@ -180,11 +178,11 @@ int main(int argc, char* argv[])
             //Affichage
             window.clear();
             DrawAllEnemies(&enemiesTotal, &window);
+            DrawBase(&base, &window);
+            DrawBaseLife(&base, &window);
             DrawAllBullets(&window, &bulletsTotal);
             DrawAllParticleSystem(&window, &particleSystems);
             DrawAllPlayers(&players, &window);
-            DrawBase(&base, &window);
-            DrawBaseLife(&base, &window);
             
         }
         else {
@@ -208,9 +206,9 @@ int main(int argc, char* argv[])
                 }
             }
 
-            
             //Affichage
             window.clear();
+            DrawAllButton(&window, &buttons);
         }
         window.display();
     }

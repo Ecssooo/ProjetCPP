@@ -11,4 +11,4 @@ void InitPlayers(std::list<int> JosticksID, std::vector<Player>* players, Bullet
 void CheckJoystick(std::list<int> JosticksID, std::vector<sf::Vector2f>* inputs, std::vector<Player>* players, Bullet* bullet);
 bool CheckPlayerExist(int id, std::vector<Player>* players);
 void GetInputs(std::list<int> JosticksID, std::vector<sf::Vector2f>* inputs);
-int GetReadyInputs(std::list<int> JosticksID, std::vector<Player>* players);
+void GetReadyInputs(std::list<int> JosticksID, std::vector<Player>* players);
