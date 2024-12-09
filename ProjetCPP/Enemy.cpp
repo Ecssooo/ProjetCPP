@@ -1,6 +1,6 @@
 #include "Enemy.h"
 
-void SpawnEnemies(std::list<Enemy>* enemies, std::list<Enemy>* enemiesType, sf::RenderWindow* window, float deltatime) {
+void SpawnEnemies(std::list<Enemy>* enemies, std::list<Enemy>* enemiesType, sf::Vector2f basePos, sf::RenderWindow* window, float deltatime) {
 
     std::list<Enemy>::iterator it = enemiesType->begin();
     while (it != enemiesType->end())
@@ -8,10 +8,12 @@ void SpawnEnemies(std::list<Enemy>* enemies, std::list<Enemy>* enemiesType, sf::
         (*it).spawnTime += deltatime;
         if ((*it).spawnTime >= (*it).spawnTimer)
         {
-            (*it).spawnTime = 0;
-            float x = rand() % window->getSize().x - (*it).shape.getRadius();
-            float y = rand() % window->getSize().y - (*it).shape.getRadius();
-            (*enemies).push_back(CreateEnemy(&(*it), sf::Vector2f{x, y}));
+            float x = rand() % window->getSize().x;
+            float y = rand() % window->getSize().y;
+            if (IIM::GetDistance({ x,y }, basePos) > 500) {
+                (*it).spawnTime = 0;
+                (*enemies).push_back(CreateEnemy(&(*it), sf::Vector2f{ x, y }));
+            }
         }
         it++;
     }
