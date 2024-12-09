@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Bullet.h"
+#include "Base.h"
 #include "ColisionManager.h"
 #include "Multiplayer.h"
 #include "ParticleSystem.h"
@@ -11,6 +12,7 @@
 
 int main(int argc, char* argv[])
 {
+    srand(time(NULL));
     sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "GW", sf::Style::Fullscreen);
     //Initialisation
     sf::Clock clock;
@@ -34,7 +36,8 @@ int main(int argc, char* argv[])
     if (GetNbJostick(JosticksID) > 0) InitPlayers(JosticksID, &players, &bullet);
     std::vector<sf::Vector2f> inputs{8, { 0,0 } };
     std::vector<sf::Vector2f> playersPos {};
-    
+
+    Base base = CreateBase(&window, 100, 10, 60);
 
     int playersReady = 0;
     bool GamePause = true;
@@ -142,6 +145,10 @@ int main(int argc, char* argv[])
                 if ((event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)) {
                     gameStates = GAMESTATES::PAUSE;
                 }
+
+                if ((event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::B)) {
+                    BaseTakeDamage(&base);
+                }
             }
             if (GetNbJostick(JosticksID) > 0)
             {
@@ -167,6 +174,9 @@ int main(int argc, char* argv[])
             DrawAllBullets(&window, &bulletsTotal);
             DrawAllParticleSystem(&window, &particleSystems);
             DrawAllPlayers(&players, &window);
+            DrawBase(&base, &window);
+            DrawBaseLife(&base, &window);
+            
         }
         else {
             //Affichage
