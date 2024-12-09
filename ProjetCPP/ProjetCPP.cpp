@@ -35,7 +35,8 @@ int main(int argc, char* argv[])
     std::vector<sf::Vector2f> inputs{8, { 0,0 } };
     std::vector<sf::Vector2f> playersPos {};
     
-
+    float currentTimer = 0;
+    
     int playersReady = 0;
     bool GamePause = true;
 
@@ -43,7 +44,7 @@ int main(int argc, char* argv[])
     while (window.isOpen())
     {
         float deltaTime = clock.restart().asSeconds();
-
+        
         switch (gameStates)
         {
             default:
@@ -81,7 +82,6 @@ int main(int argc, char* argv[])
                     }
                     gameStates = GAMESTATES::ROUNDINPROGRESS;
                 }
-
                 break;
             case(GAMESTATES::PAUSE):
                 GamePause = true;
@@ -94,6 +94,11 @@ int main(int argc, char* argv[])
             case(GAMESTATES::ROUNDINPROGRESS):
                 GamePause = false;
 
+                if(Timer(deltaTime, &currentTimer, 10))
+                {
+                    gameStates = GAMESTATES::REVIVE;
+                    currentTimer = 0;
+                }
                 //Update
                 for (int i = 0; i < players.size(); i++) {
                     if(players[i].playerStates == PLAYERSTATES::ALIVE)
@@ -112,16 +117,18 @@ int main(int argc, char* argv[])
                 }
                 MoveAllEnemies(&enemiesTotal, playersPos, deltaTime);
                 CheckCollision(&enemiesTotal, &particleSystems, &players, &bulletsTotal);
-
-                if(PlayerAlive(&players) == players.size())
-                {
-                    gameStates = GAMESTATES::REVIVE;
-                }
-                
+            
                 break;
             case(GAMESTATES::REVIVE):
                 GamePause = false;
                 enemiesTotal.clear();
+
+                if(Timer(deltaTime, &currentTimer, 10))
+                {
+                    gameStates = GAMESTATES::ROUNDINPROGRESS;
+                    currentTimer = 0;
+                }
+            
                 for (int i = 0; i < players.size(); i++) {
                     if (players[i].playerStates == PLAYERSTATES::DEAD)
                     {
@@ -129,7 +136,6 @@ int main(int argc, char* argv[])
                         players[i].hp = 3;
                     }
                 }
-                gameStates = GAMESTATES::ROUNDINPROGRESS;
 
                 break;
         }
@@ -155,6 +161,7 @@ int main(int argc, char* argv[])
 
             //Update
             MoveAllPlayers(&players, inputs, & window, deltaTime);
+            MoveAllBullets(&window, &bulletsTotal, deltaTime);
 
             for (int i = 0; i < players.size(); i++) {
                 playersPos.push_back(players[i].position);
