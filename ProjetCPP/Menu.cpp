@@ -2,7 +2,7 @@
 
 #include "MathUtils.h"
 
-void Button::ChangeText(BUTTONSTATES newState)
+void Button::Change(BUTTONSTATES newState)
 {
     switch(newState)
     {
@@ -27,5 +27,25 @@ void Button::ChangeText(BUTTONSTATES newState)
 bool Button::OnClick(sf::RenderWindow* window)
 {
     sf::Vector2i mousePosition = sf::Mouse::getPosition(*window);
-    return IIM::IsOverlappingBoxOnBox(this->position, this->shape.getSize(), (sf::Vector2f)mousePosition, {0.1f,0.1f});
+    if(IIM::IsOverlappingBoxOnBox(this->position, this->shape.getSize(), (sf::Vector2f)mousePosition, {0.1f,0.1f}))
+    {
+        this->shape.setFillColor(sf::Color {200, 200, 200});
+        return sf::Mouse::isButtonPressed(sf::Mouse::Left);
+    }
+    this->shape.setFillColor(sf::Color::White);
+    return false;
 }
+
+void DrawAllButton(sf::RenderWindow* window, std::vector<Button>* buttons)
+{
+    for(int i = 0; i < buttons->size(); i++)
+    {
+        if((*buttons)[i].buttonState != BUTTONSTATES::NONE)
+        {
+            (*buttons)[i].shape.setPosition((*buttons)[i].position);
+            (*buttons)[i].shape.setOrigin({(*buttons)[i].shape.getSize().x / 2, (*buttons)[i].shape.getSize().y / 2});
+            window->draw((*buttons)[i].shape);
+        }
+    }
+}
+

@@ -1,8 +1,10 @@
 #pragma once
+#include <list>
 #include <SFML/Graphics.hpp>
 
 enum class BUTTONSTATES
 {
+    NONE,
     RESUME,
     RETRY,
     QUIT,
@@ -16,8 +18,8 @@ struct Button
     sf::RectangleShape shape;
     BUTTONSTATES buttonState;
     
-    void ChangeText(BUTTONSTATES newState);
+    void Change(BUTTONSTATES newState);
     bool OnClick(sf::RenderWindow* window);
 };
 
-
+void DrawAllButton(sf::RenderWindow* window, std::vector<Button>* buttons);

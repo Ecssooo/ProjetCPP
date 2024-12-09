@@ -5,8 +5,6 @@
 enum class GAMESTATES
 {
     START,
-    PAUSE,
-    END,
     ROUNDINPROGRESS,
     REVIVE
 };

@@ -8,6 +8,7 @@
 #include "Multiplayer.h"
 #include "ParticleSystem.h"
 #include "GameManager.h"
+#include "Menu.h"
 
 int main(int argc, char* argv[])
 {
@@ -17,6 +18,8 @@ int main(int argc, char* argv[])
     sf::Clock clock;
 
     GAMESTATES gameStates = GAMESTATES::START;
+    GAMESTATES pastGameStates = GAMESTATES::START;
+    bool GamePause = true;
 
     std::list<Enemy> enemiesTypes{
         Enemy{100, 1, false, sf::CircleShape {20, 3}, sf::Color::Red, 1.0f },
@@ -36,11 +39,15 @@ int main(int argc, char* argv[])
     if (GetNbJostick(JosticksID) > 0) InitPlayers(JosticksID, &players, &bullet);
     std::vector<sf::Vector2f> inputs{8, { 0,0 } };
     std::vector<sf::Vector2f> playersPos {};
+
+    std::vector<Button> buttons {
+        {"None", {(float)window.getSize().x / 2,400}, sf::RectangleShape{{500,200}}, BUTTONSTATES::NONE},
+        {"Quit", {(float)window.getSize().x / 2,700}, sf::RectangleShape{{500,200}}, BUTTONSTATES::QUIT},
+    };
     
     float currentTimer = 0;
     
     int playersReady = 0;
-    bool GamePause = true;
 
     //Boucle de jeu
     while (window.isOpen())
@@ -53,7 +60,6 @@ int main(int argc, char* argv[])
                 gameStates = GAMESTATES::START;
                 break;
             case(GAMESTATES::START):
-                GamePause = true;
 
                 //Input
                 if (GetNbJostick(JosticksID) > 0)
@@ -79,22 +85,11 @@ int main(int argc, char* argv[])
 
                 if (playersReady == players.size())
                 {
-                    for (int i = 0; i < players.size(); i++) {
-                        players[i].playerStates = PLAYERSTATES::ALIVE;
-                    }
-                    gameStates = GAMESTATES::ROUNDINPROGRESS;
+                    gameStates = GAMESTATES::REVIVE;
+                    GamePause = false;
                 }
                 break;
-            case(GAMESTATES::PAUSE):
-                GamePause = true;
-                window.close();
-                break;
-            case(GAMESTATES::END):
-                GamePause = true;
-                window.close();
-                break;
             case(GAMESTATES::ROUNDINPROGRESS):
-                GamePause = false;
 
                 if(Timer(deltaTime, &currentTimer, 10))
                 {
@@ -122,7 +117,6 @@ int main(int argc, char* argv[])
             
                 break;
             case(GAMESTATES::REVIVE):
-                GamePause = false;
                 enemiesTotal.clear();
 
                 if(Timer(deltaTime, &currentTimer, 10))
@@ -132,7 +126,7 @@ int main(int argc, char* argv[])
                 }
             
                 for (int i = 0; i < players.size(); i++) {
-                    if (players[i].playerStates == PLAYERSTATES::DEAD)
+                    if (players[i].playerStates != PLAYERSTATES::ALIVE)
                     {
                         players[i].playerStates = PLAYERSTATES::ALIVE;
                         players[i].hp = 3;
@@ -148,7 +142,9 @@ int main(int argc, char* argv[])
             while (window.pollEvent(event))
             {
                 if ((event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)) {
-                    gameStates = GAMESTATES::PAUSE;
+                    pastGameStates = gameStates;
+                    buttons[0].buttonState = BUTTONSTATES::RESUME;
+                    GamePause = true;
                 }
             }
             if (GetNbJostick(JosticksID) > 0)
@@ -178,8 +174,31 @@ int main(int argc, char* argv[])
             DrawAllPlayers(&players, &window);
         }
         else {
+            
+            for(int i = 0; i < buttons.size(); i++)
+            {
+                if(buttons[i].OnClick(&window))
+                {
+                    switch(buttons[i].buttonState)
+                    {
+                        default:
+                            break;
+                        case(BUTTONSTATES::QUIT):
+                            window.close();
+                            break;
+                        case(BUTTONSTATES::RESUME):
+                            gameStates = pastGameStates;
+                            GamePause = false;
+                            break;
+                    }
+                }
+            }
+
+            
             //Affichage
             window.clear();
+            DrawAllButton(&window, &buttons);
+            
         }
         window.display();
     }
