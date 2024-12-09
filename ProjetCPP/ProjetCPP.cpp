@@ -17,9 +17,10 @@ int main(int argc, char* argv[])
 
     GAMESTATES gameStates = GAMESTATES::START;
 
-    std::list<Enemy> enemiesTypes{ 
-        Enemy{100, sf::CircleShape {20, 3}, sf::Color::Red, 1.0f },
-        Enemy{150, sf::CircleShape {20, 4}, sf::Color::Red, 1.2f }
+    std::list<Enemy> enemiesTypes{
+        Enemy{100, false, sf::CircleShape {20, 3}, sf::Color::Red, 1.0f },
+        Enemy{100, true, sf::CircleShape {20, 3}, sf::Color::Yellow, 1.0f },
+        Enemy{150, false, sf::CircleShape {20, 4}, sf::Color::Red, 1.2f }
     };
     std::list<Enemy> enemiesTotal{};
 
@@ -115,7 +116,7 @@ int main(int argc, char* argv[])
                 for (int i = 0; i < players.size(); i++) {
                     playersPos.push_back(players[i].position);
                 }
-                MoveAllEnemies(&enemiesTotal, playersPos, deltaTime);
+                MoveAllEnemies(&enemiesTotal, {0,0}, playersPos, deltaTime);
                 CheckCollision(&enemiesTotal, &particleSystems, &players, &bulletsTotal);
             
                 break;

@@ -8,10 +8,10 @@ void SpawnEnemies(std::list<Enemy>* enemies, std::list<Enemy>* enemiesType, sf::
         (*it).spawnTime += deltatime;
         if ((*it).spawnTime >= (*it).spawnTimer)
         {
-            float x = rand() % window->getSize().x;
-            float y = rand() % window->getSize().y;
-            (*enemies).push_back(CreateEnemy(&(*it), sf::Vector2f{x, y}));
             (*it).spawnTime = 0;
+            float x = rand() % window->getSize().x - (*it).shape.getRadius();
+            float y = rand() % window->getSize().y - (*it).shape.getRadius();
+            (*enemies).push_back(CreateEnemy(&(*it), sf::Vector2f{x, y}));
         }
         it++;
     }
@@ -29,21 +29,35 @@ Enemy CreateEnemy(Enemy* enemy, sf::Vector2f position)
     return newEnemy;
 }
 
-void MoveAllEnemies(std::list<Enemy>* enemies, std::vector<sf::Vector2f> playersPos, float deltatime)
+void MoveAllEnemies(std::list<Enemy>* enemies, sf::Vector2f basePos , std::vector<sf::Vector2f> playersPos, float deltatime)
 {
     std::list<Enemy>::iterator it = enemies->begin();
     while (it != enemies->end())
     {
-        sf::Vector2f destination = playersPos[0];
-        float distance = IIM::GetDistance(destination, (*it).position);
-        for (int i = 0; i < playersPos.size(); i++)
-        {
-            if (IIM::GetDistance(playersPos[i], (*it).position) < distance) {
-                distance = IIM::GetDistance(playersPos[i], (*it).position);
-                destination = playersPos[i];
+        if ((*it).spawnTime < 2) {
+            (*it).spawnTime += deltatime;
+            sf::Color newColor = (*it).shape.getFillColor();
+            newColor.a = (*it).spawnTime * 255 / 2;
+            (*it).shape.setFillColor(newColor);
+            (*it).shape.setScale((*it).spawnTime / 2, (*it).spawnTime / 2);
+        }
+        else {
+            if ((*it).targetPlayers) {
+                sf::Vector2f destination = playersPos[0];
+                float distance = IIM::GetDistance(destination, (*it).position);
+                for (int i = 0; i < playersPos.size(); i++)
+                {
+                    if (IIM::GetDistance(playersPos[i], (*it).position) < distance) {
+                        distance = IIM::GetDistance(playersPos[i], (*it).position);
+                        destination = playersPos[i];
+                    }
+                }
+                (*it).Move(destination - (*it).position, deltatime);
+            }
+            else {
+                (*it).Move(basePos - (*it).position, deltatime);
             }
         }
-        (*it).Move(destination - (*it).position, deltatime);
         it++;
     }
 }

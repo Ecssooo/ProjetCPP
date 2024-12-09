@@ -6,6 +6,8 @@
 struct Enemy
 {
     float speed;
+    bool targetPlayers = false;
+
     //SFML
     sf::CircleShape shape;
     sf::Color color;
@@ -25,5 +27,5 @@ struct Enemy
 
 void SpawnEnemies(std::list<Enemy>* enemiesTotal, std::list<Enemy>* enemies, sf::RenderWindow* window, float deltatime);
 Enemy CreateEnemy(Enemy* enemy, sf::Vector2f position);
-void MoveAllEnemies(std::list<Enemy>* enemies, std::vector<sf::Vector2f> playersPos, float deltatime);
+void MoveAllEnemies(std::list<Enemy>* enemies, sf::Vector2f basePos, std::vector<sf::Vector2f> playersPos, float deltatime);
 void DrawAllEnemies(std::list<Enemy>* enemies, sf::RenderWindow* window);
