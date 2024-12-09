@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Bullet.h"
+#include "Base.h"
 #include "ColisionManager.h"
 #include "Multiplayer.h"
 #include "ParticleSystem.h"
@@ -47,6 +48,9 @@ int main(int argc, char* argv[])
     
     float currentTimer = 0;
     
+
+    Base base = CreateBase(&window, 100, 10, 60);
+
     int playersReady = 0;
 
     //Boucle de jeu
@@ -90,6 +94,7 @@ int main(int argc, char* argv[])
                 }
                 break;
             case(GAMESTATES::ROUNDINPROGRESS):
+                GamePause = false;
 
                 if(Timer(deltaTime, &currentTimer, 10))
                 {
@@ -117,6 +122,7 @@ int main(int argc, char* argv[])
             
                 break;
             case(GAMESTATES::REVIVE):
+                GamePause = false;
                 enemiesTotal.clear();
 
                 if(Timer(deltaTime, &currentTimer, 10))
@@ -132,6 +138,7 @@ int main(int argc, char* argv[])
                         players[i].hp = 3;
                     }
                 }
+                gameStates = GAMESTATES::ROUNDINPROGRESS;
 
                 break;
         }
@@ -145,6 +152,10 @@ int main(int argc, char* argv[])
                     pastGameStates = gameStates;
                     buttons[0].buttonState = BUTTONSTATES::RESUME;
                     GamePause = true;
+                }
+
+                if ((event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::B)) {
+                    BaseTakeDamage(&base);
                 }
             }
             if (GetNbJostick(JosticksID) > 0)
@@ -172,6 +183,9 @@ int main(int argc, char* argv[])
             DrawAllBullets(&window, &bulletsTotal);
             DrawAllParticleSystem(&window, &particleSystems);
             DrawAllPlayers(&players, &window);
+            DrawBase(&base, &window);
+            DrawBaseLife(&base, &window);
+            
         }
         else {
             
@@ -197,8 +211,6 @@ int main(int argc, char* argv[])
             
             //Affichage
             window.clear();
-            DrawAllButton(&window, &buttons);
-            
         }
         window.display();
     }

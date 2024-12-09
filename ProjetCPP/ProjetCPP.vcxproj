@@ -160,6 +160,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Base.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="MathUtils.cpp" />
     <ClCompile Include="Menu.cpp" />
@@ -172,6 +173,7 @@
     <ClCompile Include="Multiplayer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Base.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="ColisionManager.h" />
     <ClInclude Include="GameManager.h" />
