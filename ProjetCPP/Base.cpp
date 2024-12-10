@@ -44,7 +44,7 @@ Base CreateBase(sf::RenderWindow* window, int hp, float reviveTimer, float round
 
 void DrawBase(Base* base, sf::RenderWindow* window) {
 	window->draw(base->shape);
-	window->draw(base->timerText);
+  	window->draw(base->timerText);            
 }
 
 sf::RectangleShape SetLifeBars(sf::Color color, float length, sf::RenderWindow* window) {
@@ -61,7 +61,6 @@ void DrawBaseLife(Base* base, sf::RenderWindow* window) {
 	allHp = SetLifeBars(sf::Color::Red, (float)window->getSize().x, window);
 	float percentageLife = (float)window->getSize().x / (float)base->maxHp;
 	float length = percentageLife * base->hp;
-	std::cout << base->hp << std::endl;
 	remainingHp = SetLifeBars(sf::Color::Green, length, window);
 	window->draw(allHp);
 	window->draw(remainingHp);
@@ -71,6 +70,14 @@ void BaseTakeDamage(Base* base) {
 	base->hp -= 1;
 }
 
-bool isBaseAlive(Base* base) {
+void BaseRevive(Base* base, sf::RenderWindow* window) {
+	base->hp = base->maxHp;
+	base->position = { (float)(rand() % (int)((window->getSize().x - base->shape.getRadius()) + base->shape.getRadius())) , (float)(rand() % (int)((window->getSize().y - base->shape.getRadius()) + base->shape.getRadius())) };
+	base->shape.setPosition(base->position);
+	sf::Vector2f offset = { (float)(base->timerText.getCharacterSize() / 2), (float)((base->timerText.getCharacterSize() / 2) + 5) };
+	base->timerText.setPosition(base->position - offset);
+}
+
+bool IsBaseAlive(Base* base) {
 	return base->hp <= 0;
 }
