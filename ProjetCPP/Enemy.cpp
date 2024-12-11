@@ -9,7 +9,7 @@ void SpawnEnemies(std::list<Enemy>* enemies, std::list<Enemy>* enemiesType, sf::
         if ((*it).spawnTime >= (*it).spawnTimer)
         {
             float x = rand() % window->getSize().x;
-            float y = rand() % window->getSize().y;
+            float y = rand() % (window->getSize().y - window->getSize().y / 20);
             if (IIM::GetDistance({ x,y }, basePos) > 500) {
                 (*it).spawnTime = 0;
                 (*enemies).push_back(CreateEnemy(&(*it), sf::Vector2f{ x, y }));

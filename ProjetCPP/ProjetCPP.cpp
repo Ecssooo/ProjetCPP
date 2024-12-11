@@ -13,17 +13,21 @@
 
 int main(int argc, char* argv[])
 {
+    //Initialisation
     srand(time(NULL));
     sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "GW", sf::Style::Fullscreen);
-    //Initialisation
     sf::Clock clock;
 
+    //Setup States
     GAMESTATES gameStates = GAMESTATES::START;
     GAMESTATES pastGameStates = GAMESTATES::START;
     bool GamePause = true;
 
+    //Setup Base
     Base base = CreateBase(&window, 100, 10, 60);
-
+    float currentTimer = 0;
+    
+    //Setup Enemies
     std::list<Enemy> enemiesTypes{
         Enemy{100, 1, false, sf::CircleShape {20, 3}, sf::Color::Red, 1.0f },
         Enemy{100, 1, true, sf::CircleShape {20, 3}, sf::Color::Yellow, 10.0f },
@@ -31,34 +35,38 @@ int main(int argc, char* argv[])
     };
     std::list<Enemy> enemiesTotal{};
 
+    //Setup Particles
     std::list<ParticleSystem> particleSystems {};
 
+    //Setup Bullet
     Bullet bullet {400, sf::CircleShape{5}, sf::Color::Red};
     std::list<Bullet> bulletsTotal{};
 
+
+    //Setup Player
     std::list<int> JosticksID{0,1,2,3,4,5,6,7};
 
     std::vector<Player> players = { CreatePlayer(0, 3, 200, sf::CircleShape{ 20, 3 }, sf::Vector2f{ 300,300 }, &bullet, 0.5f, PlayerColor(0))};
     if (GetNbJostick(JosticksID) > 0) InitPlayers(JosticksID, &players, &bullet);
     std::vector<sf::Vector2f> inputs{8, { 0,0 } };
     std::vector<sf::Vector2f> playersPos {};
+    int playersReady = 0;
 
+
+    //Setup UI
     std::vector<Button> buttons {
         {"None", {(float)window.getSize().x / 2,400}, sf::RectangleShape{{500,200}}, BUTTONSTATES::NONE},
         {"Quit", {(float)window.getSize().x / 2,700}, sf::RectangleShape{{500,200}}, BUTTONSTATES::QUIT},
     };
     
-    float currentTimer = 0;
-    
 
 
-    int playersReady = 0;
-
-    //Boucle de jeu
+    //Game Loop
     while (window.isOpen())
     {
         float deltaTime = clock.restart().asSeconds();
-        
+
+        //Manage function for specific state;
         switch (gameStates)
         {
             default:
@@ -66,13 +74,14 @@ int main(int argc, char* argv[])
                 break;
             case(GAMESTATES::START):
 
-                //Input
+                //Check player ready
                 sf::Event event;
                 if (GetNbJostick(JosticksID) > 0)
                 {
                     GetReadyInputs(JosticksID, &players);
                 }
                 while (window.pollEvent(event)) {
+                    //Use keyboard if no controller 0
                     if (!sf::Joystick::isConnected(0)) {
                         if ((event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space)) {
                             players[0].playerStates = PLAYERSTATES::READY;
@@ -80,7 +89,7 @@ int main(int argc, char* argv[])
                     }
                 }
 
-                //Update
+                //Check number player ready
                 playersReady = 0;
                 for (int i = 0; i < players.size(); i++) {
                     if (players[i].playerStates == PLAYERSTATES::READY) {
@@ -88,21 +97,25 @@ int main(int argc, char* argv[])
                     }
                 }
 
+                //Change State : switch game state when all player ready;
                 if (playersReady == players.size())
                 {
                     BaseRevive(&base, &window);
+                    currentTimer = 0;
                     gameStates = GAMESTATES::REVIVE;
                     GamePause = false;
                 }
                 break;
             case(GAMESTATES::ROUNDINPROGRESS):
+                //Update timer : switch game state when ending; 
                 base.timerText.setString(std::to_string((int)(base.roundTimer - currentTimer)));
                 if(Timer(deltaTime, &currentTimer, base.roundTimer))
                 {
                     gameStates = GAMESTATES::REVIVE;
                     currentTimer = 0;
                 }
-                //Update
+
+                //Make player shoot
                 for (int i = 0; i < players.size(); i++) {
                     if(players[i].playerStates == PLAYERSTATES::ALIVE)
                     {
@@ -111,9 +124,9 @@ int main(int argc, char* argv[])
                         }
                     }
                 }
-            
                 MoveAllBullets(&window, &bulletsTotal, deltaTime);
 
+                //Update enemies
                 SpawnEnemies(&enemiesTotal, &enemiesTypes, base.position, &window, deltaTime);
                 for (int i = 0; i < players.size(); i++) {
                     if (players[i].playerStates == PLAYERSTATES::ALIVE) {
@@ -121,9 +134,12 @@ int main(int argc, char* argv[])
                     }
                 }
                 MoveAllEnemies(&enemiesTotal, base.position, playersPos, deltaTime);
-                CheckCollisions(&enemiesTotal, &particleSystems, &players, &bulletsTotal, &base);
+                CheckCollisionsPlayers(&enemiesTotal, &particleSystems, &players);
+                CheckCollisionsBase(&enemiesTotal, &base);
+                CheckCollisionsBullets(&enemiesTotal, &particleSystems, &bulletsTotal);
 
-                if (IsBaseAlive(&base)) {
+                //Change State : switch game state when base destroyed;
+                if (!IsBaseAlive(&base)) {
                     gameStates = GAMESTATES::START;
                     buttons[0].Change(BUTTONSTATES::NONE);
                     GamePause = true;
@@ -133,30 +149,36 @@ int main(int argc, char* argv[])
             case(GAMESTATES::REVIVE):
                 enemiesTotal.clear();
 
+                //Update timer : switch game state when ending;
                 base.timerText.setString(std::to_string((int)(base.revivePlayerTimer - currentTimer)));
                 if(Timer(deltaTime, &currentTimer, base.revivePlayerTimer))
                 {
                     gameStates = GAMESTATES::ROUNDINPROGRESS;
                     currentTimer = 0;
                 }
-            
+
+                //Revive dead players
                 for (int i = 0; i < players.size(); i++) {
                     if (players[i].playerStates != PLAYERSTATES::ALIVE)
                     {
                         players[i].playerStates = PLAYERSTATES::ALIVE;
                         players[i].hp = 3;
+                        players[i].position = base.position;
+                        players[i].shape.setPosition(base.position);
                     }
                 }
 
                 break;
         }
+
+        //Manage global function in game
         if (GamePause == false) {
-            //Input
+            //Get all input 
             playersPos = {};
             sf::Event event;
             while (window.pollEvent(event))
             {
-                if ((event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)) {
+                if ((event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) || GetPauseInput(JosticksID)) {
                     pastGameStates = gameStates;
                     buttons[0].Change(BUTTONSTATES::RESUME);
                     GamePause = true;
@@ -165,20 +187,20 @@ int main(int argc, char* argv[])
             if (GetNbJostick(JosticksID) > 0)
             {
                 CheckJoystick(JosticksID, &inputs, &players, &bullet);
-                GetInputs(JosticksID, &inputs);
+                GetMovementInputs(JosticksID, &inputs);
             }
+            //Use mouse if no controller 0
             if (!sf::Joystick::isConnected(0)) {
                 sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
                 inputs[0] = { mousePosition.x - players[0].position.x, mousePosition.y - players[0].position.y };
             }
 
-            //Update
+            //Update entity positions
             MoveAllPlayers(&players, inputs, & window, deltaTime);
             MoveAllBullets(&window, &bulletsTotal, deltaTime);
-
             UpdateAllParticleSystem(&particleSystems, &window, deltaTime);
 
-            //Affichage
+            //Draw game
             window.clear();
             DrawAllEnemies(&enemiesTotal, &window);
             DrawBase(&base, &window);
@@ -188,7 +210,9 @@ int main(int argc, char* argv[])
             DrawAllPlayers(&players, &window);
             
         }
+        //Manage function in menu
         else {
+            //Manage button
             sf::Event event;
             while (window.pollEvent(event));
             for(int i = 0; i < buttons.size(); i++)
@@ -210,7 +234,7 @@ int main(int argc, char* argv[])
                 }
             }
 
-            //Affichage
+            //Draw menu
             window.clear();
             DrawAllButton(&window, &buttons);
         }

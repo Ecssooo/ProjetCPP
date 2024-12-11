@@ -32,7 +32,9 @@ Base CreateBase(sf::RenderWindow* window, int hp, float reviveTimer, float round
 	base.shape.setPointCount(8);
 	base.shape.setRadius(100);
 	base.shape.setOrigin(sf::Vector2f{ base.shape.getRadius(), base.shape.getRadius() });
-	base.position = { (float)(rand() % (int)((window->getSize().x - base.shape.getRadius()) + base.shape.getRadius())) , (float)(rand() % (int)((window->getSize().y - base.shape.getRadius()) + base.shape.getRadius()))};
+	float x = rand() % (int)(window->getSize().x - base.shape.getRadius() * 2) + base.shape.getRadius();
+	float y = rand() % (int)(window->getSize().y - (base.shape.getRadius() * 2 + window->getSize().y / 20)) + base.shape.getRadius();
+	base.position = {  x, y};
 	sf::Vector2f offset = { (float)(base.timerText.getCharacterSize() / 2), (float)((base.timerText.getCharacterSize() / 2) + 5) };
 	base.timerText.setPosition(base.position - offset);
 	base.shape.setPosition(base.position);
@@ -72,12 +74,14 @@ void BaseTakeDamage(Base* base) {
 
 void BaseRevive(Base* base, sf::RenderWindow* window) {
 	base->hp = base->maxHp;
-	base->position = { (float)(rand() % (int)((window->getSize().x - base->shape.getRadius()) + base->shape.getRadius())) , (float)(rand() % (int)((window->getSize().y - base->shape.getRadius()) + base->shape.getRadius())) };
+	float x = rand() % (int)(window->getSize().x - base->shape.getRadius() * 2) + base->shape.getRadius();
+	float y = rand() % (int)(window->getSize().y - (base->shape.getRadius() * 2 + window->getSize().y / 20)) + base->shape.getRadius();
+	base->position = {  x, y};
 	base->shape.setPosition(base->position);
 	sf::Vector2f offset = { (float)(base->timerText.getCharacterSize() / 2), (float)((base->timerText.getCharacterSize() / 2) + 5) };
 	base->timerText.setPosition(base->position - offset);
 }
 
 bool IsBaseAlive(Base* base) {
-	return base->hp <= 0;
+	return base->hp > 0;
 }
