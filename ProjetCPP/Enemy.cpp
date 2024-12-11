@@ -44,7 +44,7 @@ void MoveAllEnemies(std::list<Enemy>* enemies, sf::Vector2f basePos , std::vecto
             (*it).shape.setScale((*it).spawnTime / 2, (*it).spawnTime / 2);
         }
         else {
-            if ((*it).targetPlayers) {
+            if ((*it).targetPlayers && playersPos.size() != 0) {
                 sf::Vector2f destination = playersPos[0];
                 float distance = IIM::GetDistance(destination, (*it).position);
                 for (int i = 0; i < playersPos.size(); i++)

@@ -89,9 +89,11 @@ void GetReadyInputs(std::list<int> JosticksID, std::vector<Player>* players)
     std::list<int>::iterator joystickIterator = JosticksID.begin();
     while(joystickIterator != JosticksID.end())
     {
-        if(sf::Joystick::isButtonPressed((*joystickIterator),0))
-        {
-            (*players)[(*joystickIterator)].playerStates = PLAYERSTATES::READY;
+        for (int i = 0; i < sf::Joystick::getButtonCount(*joystickIterator); i++) {
+            if (sf::Joystick::isButtonPressed((*joystickIterator), i))
+            {
+                (*players)[(*joystickIterator)].playerStates = PLAYERSTATES::READY;
+            }
         }
         joystickIterator++;
     }

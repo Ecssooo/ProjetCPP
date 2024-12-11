@@ -14,12 +14,11 @@ struct Base {
 	sf::Color color;
 	sf::Vector2f position;
 
-
-	
 };
 
 bool IsBaseAlive(Base* base);
 void DrawBase(Base* base, sf::RenderWindow* window);
 void DrawBaseLife(Base* base, sf::RenderWindow* window);
 void BaseTakeDamage(Base* base);
+void BaseRevive(Base* base, sf::RenderWindow* window);
 Base CreateBase(sf::RenderWindow* window, int hp, float reviveTimer, float roundTimer);

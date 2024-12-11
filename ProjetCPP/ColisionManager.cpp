@@ -1,13 +1,18 @@
 #include "ColisionManager.h"
 
-void CheckCollision(std::list<Enemy>* enemies, std::list<ParticleSystem>* particleSystems, std::vector<Player>* players, std::list<Bullet>* bullets)
+void CheckCollisions(std::list<Enemy>* enemies, std::list<ParticleSystem>* particleSystems, std::vector<Player>* players, std::list<Bullet>* bullets, Base* base)
 {
     std::list<Enemy>::iterator it = enemies->begin();
     while (it != enemies->end())
     {
+        if ((*it).Touch((*base).position, (*base).shape.getRadius())) {
+            it = enemies->erase(it);
+            BaseTakeDamage(base);
+            return;
+        }
         for (int i = 0; i < players->size(); i++)
         {
-            if ((*it).Touch((*players)[i].position, (*players)[i].shape.getRadius())) {
+            if ((*it).Touch((*players)[i].position, (*players)[i].shape.getRadius()) && (*players)[i].playerStates == PLAYERSTATES::ALIVE) {
                 it = enemies->erase(it);
                 (*players)[i].TakeDamage();
                 if ((*players)[i].hp <= 0) {
