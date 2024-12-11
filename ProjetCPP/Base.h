@@ -1,5 +1,7 @@
 #pragma once
 #include "SFML/Graphics.hpp"
+#include "Windows.h"
+#include <iostream>
 
 
 struct Base {
@@ -14,11 +16,11 @@ struct Base {
 	sf::Color color;
 	sf::Vector2f position;
 
+	void BaseTakeDamage(int damage);
+	void BaseRevive(sf::RenderWindow* window);
+	bool IsBaseAlive();	
 };
 
-bool IsBaseAlive(Base* base);
 void DrawBase(Base* base, sf::RenderWindow* window);
 void DrawBaseLife(Base* base, sf::RenderWindow* window);
-void BaseTakeDamage(Base* base);
-void BaseRevive(Base* base, sf::RenderWindow* window);
 Base CreateBase(sf::RenderWindow* window, int hp, float reviveTimer, float roundTimer);

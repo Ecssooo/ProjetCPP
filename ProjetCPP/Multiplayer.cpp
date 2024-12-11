@@ -7,9 +7,9 @@ sf::Color PlayerColor(int id) {
         sf::Color::Yellow,
         sf::Color::Magenta,
         sf::Color::Cyan,
-        sf::Color(226, 133, 110, 255),
-        sf::Color(236, 240, 241, 255),
-        sf::Color(97, 155, 138, 255)
+        sf::Color(226, 133, 110, 255), //Lemon 
+        sf::Color(255,192,203, 255), //Pink
+        sf::Color(97, 155, 138, 255) //Cyan
     };
     return ColorList[id];
 }
@@ -34,7 +34,7 @@ void InitPlayers(std::list<int> JosticksID, std::vector<Player>* players, Bullet
     while (it != JosticksID.end()) {
         if (sf::Joystick::isConnected(*it)) {
             float pos = 100.f * (*it) + 300.f;
-            (*players).push_back(CreatePlayer((*it), 3, 200, sf::CircleShape{ 20, 3 }, sf::Vector2f{ pos ,300 }, bullet, 0.5f, PlayerColor(i)));
+            (*players).push_back(CreatePlayer((*it), 3, 200, sf::CircleShape{ 15, 3 }, sf::Vector2f{ pos ,300 }, bullet, 0.5f, PlayerColor(i)));
         }
         i++;
         it++;
@@ -47,7 +47,7 @@ void CheckJoystick(std::list<int> JosticksID, std::vector<sf::Vector2f>* inputs,
     while (it != JosticksID.end()) {
         if (sf::Joystick::isConnected(*it) && !CheckPlayerExist((*it), players) && (*it) != 0) {
             float pos = 100.f * (*it) + 300.f;
-            (*players).push_back(CreatePlayer((*it), 3, 200, sf::CircleShape{ 20, 3 }, sf::Vector2f{ pos,300 }, bullet, 0.5f, PlayerColor(i)));
+            (*players).push_back(CreatePlayer((*it), 3, 200, sf::CircleShape{ 15, 3 }, sf::Vector2f{ pos,300 }, bullet, 0.5f, PlayerColor(i)));
         }
         else if (!sf::Joystick::isConnected(*it) && CheckPlayerExist((*it), players) && (*it) != 0) {
             std::vector<Player>::iterator that = (*players).begin();

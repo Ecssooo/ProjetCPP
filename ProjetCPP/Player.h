@@ -36,7 +36,7 @@ struct Player
     void LookAt(sf::Vector2f direction);
     bool CanShoot(float deltatime);
     Bullet Shoot();
-    void TakeDamage();
+    void TakeDamage(int damage);
     void DrawHealth(sf::RenderWindow* window, int offset);
 };
 

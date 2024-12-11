@@ -19,23 +19,27 @@ int main(int argc, char* argv[])
 {
     //Initialisation
     srand(time(NULL));
-    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "GW", sf::Style::Fullscreen);
+    sf::RenderWindow window(sf::VideoMode(1920, 1080), "GW", sf::Style::Fullscreen);
     sf::Clock clock;
 
+    
+    
     //Setup States
     GAMESTATES gameStates = GAMESTATES::START;
     GAMESTATES pastGameStates = GAMESTATES::START;
     bool GamePause = true;
 
     //Setup Base
-    Base base = CreateBase(&window, 100, 10, 60);
+    Base base = CreateBase(&window, 100, 5, 30);
     float currentTimer = 0;
     
     //Setup Enemies
     std::list<Enemy> enemiesTypes{
-        Enemy{100, 1, false, sf::CircleShape {20, 3}, sf::Color::Red, 1.0f },
-        Enemy{100, 1, true, sf::CircleShape {20, 3}, sf::Color::Yellow, 10.0f },
-        Enemy{150, 2, false, sf::CircleShape {20, 4}, sf::Color::Red, 1.2f }
+        Enemy{100, 1, false, sf::CircleShape {15, 3}, sf::Color{227,41,20}, 2.75f },
+        Enemy{100, 1, true, sf::CircleShape {15, 3}, sf::Color{251,1,1}, 4.1f },
+        Enemy{150, 2, false, sf::CircleShape {15, 4}, sf::Color{199,56,19}, 5.5f } ,
+        Enemy{300, 0, true, sf::CircleShape {5}, sf::Color{249,70,9}, 1.3f },
+        Enemy{50, 40, false, sf::CircleShape {175, 12}, sf::Color{165,21,13}, 10.0f }
     };
     std::list<Enemy> enemiesTotal{};
 
@@ -43,14 +47,14 @@ int main(int argc, char* argv[])
     std::list<ParticleSystem> particleSystems {};
 
     //Setup Bullet
-    Bullet bullet {400, sf::CircleShape{5}, sf::Color::Red};
+    Bullet bullet {400, sf::CircleShape{2.5}, sf::Color {236, 240, 241, 255}};
     std::list<Bullet> bulletsTotal{};
 
 
     //Setup Player
     std::list<int> JosticksID{0,1,2,3,4,5,6,7};
 
-    std::vector<Player> players = { CreatePlayer(0, 3, 200, sf::CircleShape{ 20, 3 }, sf::Vector2f{ 300,300 }, &bullet, 0.5f, PlayerColor(0))};
+    std::vector<Player> players = { CreatePlayer(0, 3, 200, sf::CircleShape{ 15, 3 }, sf::Vector2f{ 300,300 }, &bullet, 0.5f, PlayerColor(0))};
     if (GetNbJostick(JosticksID) > 0) InitPlayers(JosticksID, &players, &bullet);
     std::vector<sf::Vector2f> inputs{8, { 0,0 } };
     std::vector<sf::Vector2f> playersPos {};
@@ -104,7 +108,7 @@ int main(int argc, char* argv[])
                 //Change State : switch game state when all player ready;
                 if (playersReady == players.size())
                 {
-                    BaseRevive(&base, &window);
+                    base.BaseRevive(&window);
                     currentTimer = 0;
                     gameStates = GAMESTATES::REVIVE;
                     GamePause = false;
@@ -143,7 +147,7 @@ int main(int argc, char* argv[])
                 CheckCollisionsBullets(&enemiesTotal, &particleSystems, &bulletsTotal);
 
                 //Change State : switch game state when base destroyed;
-                if (!IsBaseAlive(&base)) {
+                if (!base.IsBaseAlive()) {
                     gameStates = GAMESTATES::START;
                     buttons[0].Change(BUTTONSTATES::NONE);
                     GamePause = true;
@@ -163,10 +167,10 @@ int main(int argc, char* argv[])
 
                 //Revive dead players
                 for (int i = 0; i < players.size(); i++) {
+                    players[i].hp = 3;
                     if (players[i].playerStates != PLAYERSTATES::ALIVE)
                     {
                         players[i].playerStates = PLAYERSTATES::ALIVE;
-                        players[i].hp = 3;
                         players[i].position = base.position;
                         players[i].shape.setPosition(base.position);
                     }
