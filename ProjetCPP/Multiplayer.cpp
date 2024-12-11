@@ -73,7 +73,7 @@ bool CheckPlayerExist(int id, std::vector<Player>* players) {
     return false;
 }
 
-void GetInputs(std::list<int> JosticksID, std::vector<sf::Vector2f>* inputs) {
+void GetMovementInputs(std::list<int> JosticksID, std::vector<sf::Vector2f>* inputs) {
     std::list<int>::iterator it = JosticksID.begin();
     while (it != JosticksID.end()) {
         if (sf::Joystick::isConnected(*it))
@@ -89,12 +89,24 @@ void GetReadyInputs(std::list<int> JosticksID, std::vector<Player>* players)
     std::list<int>::iterator joystickIterator = JosticksID.begin();
     while(joystickIterator != JosticksID.end())
     {
-        for (int i = 0; i < sf::Joystick::getButtonCount(*joystickIterator); i++) {
-            if (sf::Joystick::isButtonPressed((*joystickIterator), i))
-            {
-                (*players)[(*joystickIterator)].playerStates = PLAYERSTATES::READY;
-            }
+        if (sf::Joystick::isButtonPressed((*joystickIterator), 0))
+        {
+            (*players)[(*joystickIterator)].playerStates = PLAYERSTATES::READY;
         }
         joystickIterator++;
     }
+}
+
+bool GetPauseInput(std::list<int> JosticksID)
+{
+    std::list<int>::iterator joystickIterator = JosticksID.begin();
+    while(joystickIterator != JosticksID.end())
+    {
+        if (sf::Joystick::isButtonPressed((*joystickIterator), 7))
+        {
+            return true;
+        }
+        joystickIterator++;
+    }
+    return false;
 }
