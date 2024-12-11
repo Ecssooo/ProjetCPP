@@ -22,7 +22,7 @@ struct Button
 
     void Change(BUTTONSTATES newState);
     bool OnClick(sf::RenderWindow* window);
-    void SetFont(sf::Font* font);
 };
 
 void DrawAllButton(sf::RenderWindow* window, std::vector<Button>* buttons);
+Button CreateButton(std::string text, sf::Vector2f position, sf::RectangleShape shape, BUTTONSTATES state);

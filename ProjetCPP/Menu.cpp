@@ -1,16 +1,8 @@
 #include "Menu.h"
-#include "Windows.h"
 #include "MathUtils.h"
+#include "Font.h"
+#include <iostream>
 
-
-std::string getAssetsPath() {
-    char cExeFilePath[256];
-    GetModuleFileNameA(NULL, cExeFilePath, 256);
-    std::string exeFilePath = cExeFilePath;
-    int exeNamePos = exeFilePath.find_last_of("\\/");
-    std::string appPath = exeFilePath.substr(0, exeNamePos + 1);
-    return appPath + "\\Assets";
-}
 
 void Button::Change(BUTTONSTATES newState)
 {
@@ -49,20 +41,32 @@ bool Button::OnClick(sf::RenderWindow* window)
     return false;
 }
 
-void Button::SetFont(sf::Font* font) {
-    ButtonText.setFont(*font);
-}
-
 void DrawAllButton(sf::RenderWindow* window, std::vector<Button>* buttons)
 {
     for(int i = 0; i < buttons->size(); i++)
     {
-        if((*buttons)[i].buttonState != BUTTONSTATES::NONE)
+        if ((*buttons)[i].buttonState != BUTTONSTATES::NONE)
         {
+            (*buttons)[i].ButtonText.setPosition((*buttons)[i].position);
+            (*buttons)[i].ButtonText.setFont((*buttons)[i].font);
+            (*buttons)[i].ButtonText.setFillColor(sf::Color::Magenta);
+            (*buttons)[i].ButtonText.setCharacterSize(40);
+            (*buttons)[i].ButtonText.setOrigin({ (*buttons)[i].shape.getSize().x / 2, (*buttons)[i].shape.getSize().y / 2 });
             (*buttons)[i].shape.setPosition((*buttons)[i].position);
-            (*buttons)[i].shape.setOrigin({(*buttons)[i].shape.getSize().x / 2, (*buttons)[i].shape.getSize().y / 2});
+            (*buttons)[i].shape.setOrigin({ (*buttons)[i].shape.getSize().x / 2, (*buttons)[i].shape.getSize().y / 2 });
             window->draw((*buttons)[i].shape);
+            window->draw((*buttons)[i].ButtonText);
         }
     }
 }
 
+Button CreateButton(std::string text, sf::Vector2f position, sf::RectangleShape shape, BUTTONSTATES state) {
+    Button tempButton;
+    tempButton.text = text;
+    tempButton.position = position;
+    tempButton.shape = shape;
+    tempButton.buttonState = state;
+    tempButton.font.loadFromFile(GetFont() + "\\ARIAL.TTF");
+    return tempButton;
+
+}
