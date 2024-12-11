@@ -15,9 +15,11 @@ int main(int argc, char* argv[])
 {
     //Initialisation
     srand(time(NULL));
-    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "GW", sf::Style::Fullscreen);
+    sf::RenderWindow window(sf::VideoMode(1920, 1080), "GW", sf::Style::Fullscreen);
     sf::Clock clock;
 
+    
+    
     //Setup States
     GAMESTATES gameStates = GAMESTATES::START;
     GAMESTATES pastGameStates = GAMESTATES::START;
@@ -29,11 +31,11 @@ int main(int argc, char* argv[])
     
     //Setup Enemies
     std::list<Enemy> enemiesTypes{
-        Enemy{100, 1, false, sf::CircleShape {20, 3}, sf::Color{227,41,20}, 2.75f },
-        Enemy{100, 1, true, sf::CircleShape {20, 3}, sf::Color{251,1,1}, 4.1f },
-        Enemy{150, 2, false, sf::CircleShape {20, 4}, sf::Color{199,56,19}, 5.5f } ,
-        Enemy{300, 0, true, sf::CircleShape {7.5}, sf::Color{249,70,9}, 1.3f },
-        Enemy{50, 40, false, sf::CircleShape {250, 12}, sf::Color{165,21,13}, 10.0f }
+        Enemy{100, 1, false, sf::CircleShape {15, 3}, sf::Color{227,41,20}, 2.75f },
+        Enemy{100, 1, true, sf::CircleShape {15, 3}, sf::Color{251,1,1}, 4.1f },
+        Enemy{150, 2, false, sf::CircleShape {15, 4}, sf::Color{199,56,19}, 5.5f } ,
+        Enemy{300, 0, true, sf::CircleShape {5}, sf::Color{249,70,9}, 1.3f },
+        Enemy{50, 40, false, sf::CircleShape {175, 12}, sf::Color{165,21,13}, 10.0f }
     };
     std::list<Enemy> enemiesTotal{};
 
@@ -41,14 +43,14 @@ int main(int argc, char* argv[])
     std::list<ParticleSystem> particleSystems {};
 
     //Setup Bullet
-    Bullet bullet {400, sf::CircleShape{5}, sf::Color {236, 240, 241, 255}};
+    Bullet bullet {400, sf::CircleShape{2.5}, sf::Color {236, 240, 241, 255}};
     std::list<Bullet> bulletsTotal{};
 
 
     //Setup Player
     std::list<int> JosticksID{0,1,2,3,4,5,6,7};
 
-    std::vector<Player> players = { CreatePlayer(0, 3, 200, sf::CircleShape{ 20, 3 }, sf::Vector2f{ 300,300 }, &bullet, 0.5f, PlayerColor(0))};
+    std::vector<Player> players = { CreatePlayer(0, 3, 200, sf::CircleShape{ 15, 3 }, sf::Vector2f{ 300,300 }, &bullet, 0.5f, PlayerColor(0))};
     if (GetNbJostick(JosticksID) > 0) InitPlayers(JosticksID, &players, &bullet);
     std::vector<sf::Vector2f> inputs{8, { 0,0 } };
     std::vector<sf::Vector2f> playersPos {};

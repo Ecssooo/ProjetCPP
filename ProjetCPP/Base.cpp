@@ -24,10 +24,10 @@ Base CreateBase(sf::RenderWindow* window, int hp, float reviveTimer, float round
 	base.font.loadFromFile(getAssetsPath() + "\\ARIAL.TTF");
 	base.timerText.setFont(base.font);
 	base.timerText.setString(std::to_string((int)base.roundTimer));
-	base.timerText.setCharacterSize(60);
+	base.timerText.setCharacterSize(40);
 	base.timerText.setFillColor(sf::Color::Magenta);
 	base.shape.setPointCount(8);
-	base.shape.setRadius(100);
+	base.shape.setRadius(75);
 	base.shape.setOrigin(sf::Vector2f{ base.shape.getRadius(), base.shape.getRadius() });
 	float x = rand() % (int)(window->getSize().x - base.shape.getRadius() * 2) + base.shape.getRadius();
 	float y = rand() % (int)(window->getSize().y - (base.shape.getRadius() * 2 + window->getSize().y / 20)) + base.shape.getRadius();
