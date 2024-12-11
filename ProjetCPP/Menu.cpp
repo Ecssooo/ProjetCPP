@@ -1,6 +1,16 @@
 #include "Menu.h"
-
+#include "Windows.h"
 #include "MathUtils.h"
+
+
+std::string getAssetsPath() {
+    char cExeFilePath[256];
+    GetModuleFileNameA(NULL, cExeFilePath, 256);
+    std::string exeFilePath = cExeFilePath;
+    int exeNamePos = exeFilePath.find_last_of("\\/");
+    std::string appPath = exeFilePath.substr(0, exeNamePos + 1);
+    return appPath + "\\Assets";
+}
 
 void Button::Change(BUTTONSTATES newState)
 {
@@ -11,14 +21,17 @@ void Button::Change(BUTTONSTATES newState)
             break;
         case(BUTTONSTATES::QUIT):
             text = "Quit";
+            ButtonText.setString(text);
             buttonState = newState;
             break;
         case(BUTTONSTATES::RESUME):
             text = "Resume";
+            ButtonText.setString(text);
             buttonState = newState;
             break;
         case(BUTTONSTATES::RETRY):
             text = "Retry";
+            ButtonText.setString(text);
             buttonState = newState;
             break;
     }
@@ -34,6 +47,10 @@ bool Button::OnClick(sf::RenderWindow* window)
     }
     this->shape.setFillColor(sf::Color::White);
     return false;
+}
+
+void Button::SetFont(sf::Font* font) {
+    ButtonText.setFont(*font);
 }
 
 void DrawAllButton(sf::RenderWindow* window, std::vector<Button>* buttons)
