@@ -1,7 +1,4 @@
 #include "Base.h"
-#include "SFML/Graphics.hpp"
-#include <iostream>
-#include "Windows.h"
 
 std::string getAppPath() {
 	char cExeFilePath[256];
@@ -68,20 +65,20 @@ void DrawBaseLife(Base* base, sf::RenderWindow* window) {
 	window->draw(remainingHp);
 }
 
-void BaseTakeDamage(Base* base) {
-	base->hp -= 1;
+void Base::BaseTakeDamage(int damage) {
+	this->hp -= damage;
 }
 
-void BaseRevive(Base* base, sf::RenderWindow* window) {
-	base->hp = base->maxHp;
-	float x = rand() % (int)(window->getSize().x - base->shape.getRadius() * 2) + base->shape.getRadius();
-	float y = rand() % (int)(window->getSize().y - (base->shape.getRadius() * 2 + window->getSize().y / 20)) + base->shape.getRadius();
-	base->position = {  x, y};
-	base->shape.setPosition(base->position);
-	sf::Vector2f offset = { (float)(base->timerText.getCharacterSize() / 2), (float)((base->timerText.getCharacterSize() / 2) + 5) };
-	base->timerText.setPosition(base->position - offset);
+void Base::BaseRevive(sf::RenderWindow* window) {
+	this->hp = this->maxHp;
+	float x = rand() % (int)(window->getSize().x - this->shape.getRadius() * 2) + this->shape.getRadius();
+	float y = rand() % (int)(window->getSize().y - (this->shape.getRadius() * 2 + window->getSize().y / 20)) + this->shape.getRadius();
+	this->position = {  x, y};
+	this->shape.setPosition(this->position);
+	sf::Vector2f offset = { (float)(this->timerText.getCharacterSize() / 2), (float)((this->timerText.getCharacterSize() / 2) + 5) };
+	this->timerText.setPosition(this->position - offset);
 }
 
-bool IsBaseAlive(Base* base) {
-	return base->hp > 0;
+bool Base::IsBaseAlive() {
+	return this->hp > 0;
 }

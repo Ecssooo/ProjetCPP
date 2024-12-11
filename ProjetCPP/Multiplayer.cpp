@@ -7,9 +7,9 @@ sf::Color PlayerColor(int id) {
         sf::Color::Yellow,
         sf::Color::Magenta,
         sf::Color::Cyan,
-        sf::Color(226, 133, 110, 255),
-        sf::Color(236, 240, 241, 255),
-        sf::Color(97, 155, 138, 255)
+        sf::Color(226, 133, 110, 255), //Lemon 
+        sf::Color(255,192,203, 255), //Pink
+        sf::Color(97, 155, 138, 255) //Cyan
     };
     return ColorList[id];
 }

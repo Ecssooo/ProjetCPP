@@ -8,8 +8,8 @@ void CheckCollisionsPlayers(std::list<Enemy>* enemies, std::list<ParticleSystem>
         for (int i = 0; i < players->size(); i++)
         {
             if ((*it).Touch((*players)[i].position, (*players)[i].shape.getRadius()) && (*players)[i].playerStates == PLAYERSTATES::ALIVE) {
+                (*players)[i].TakeDamage((*it).attack);
                 it = enemies->erase(it);
-                (*players)[i].TakeDamage();
                 if ((*players)[i].hp <= 0) {
                     particleSystems->push_back(CreatePrefabSystem((*players)[i].color, (*players)[i].position));
                     (*players)[i].playerStates = PLAYERSTATES::DEAD;
@@ -27,8 +27,8 @@ void CheckCollisionsBase(std::list<Enemy>* enemies, Base* base)
     while (it != enemies->end())
     {
         if ((*it).Touch((*base).position, (*base).shape.getRadius())) {
+            base->BaseTakeDamage((*it).attack);
             it = enemies->erase(it);
-            BaseTakeDamage(base);
             continue;
         }
         it++;

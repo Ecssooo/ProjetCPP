@@ -81,8 +81,8 @@ Bullet Player::Shoot()
     return CreateBullet(this->bullet, this->position, this->direction);
 }
 
-void Player::TakeDamage() {
-    hp -= 1;
+void Player::TakeDamage(int damage) {
+    this->hp -= damage;
 }
 
 void Player::DrawHealth(sf::RenderWindow* window, int offset) {
