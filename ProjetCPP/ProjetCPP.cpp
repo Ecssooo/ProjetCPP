@@ -29,9 +29,9 @@ int main(int argc, char* argv[])
     
     //Setup Enemies
     std::list<Enemy> enemiesTypes{
-        Enemy{100, 1, false, sf::CircleShape {20, 3}, sf::Color::Red, .0f },
+        Enemy{100, 1, false, sf::CircleShape {20, 3}, sf::Color::Red, 1.0f },
         Enemy{100, 1, true, sf::CircleShape {20, 3}, sf::Color::Yellow, 10.0f },
-        Enemy{150, 2, false, sf::CircleShape {20, 4}, sf::Color::Red, .2f }
+        Enemy{150, 2, false, sf::CircleShape {20, 4}, sf::Color::Red, 1.2f }
     };
     std::list<Enemy> enemiesTotal{};
 
