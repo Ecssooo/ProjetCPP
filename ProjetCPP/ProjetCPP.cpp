@@ -134,7 +134,9 @@ int main(int argc, char* argv[])
                     }
                 }
                 MoveAllEnemies(&enemiesTotal, base.position, playersPos, deltaTime);
-                CheckCollisions(&enemiesTotal, &particleSystems, &players, &bulletsTotal, &base);
+                CheckCollisionsPlayers(&enemiesTotal, &particleSystems, &players);
+                CheckCollisionsBase(&enemiesTotal, &base);
+                CheckCollisionsBullets(&enemiesTotal, &particleSystems, &bulletsTotal);
 
                 //Change State : switch game state when base destroyed;
                 if (!IsBaseAlive(&base)) {

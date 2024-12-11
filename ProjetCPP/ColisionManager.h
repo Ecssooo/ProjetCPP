@@ -7,4 +7,6 @@
 
 
 
-void CheckCollisions(std::list<Enemy>* enemies, std::list<ParticleSystem>* particleSystems, std::vector<Player>* players, std::list<Bullet>* bullets, Base* base);
+void CheckCollisionsPlayers(std::list<Enemy>* enemies, std::list<ParticleSystem>* particleSystems, std::vector<Player>* players);
+void CheckCollisionsBase(std::list<Enemy>* enemies, Base* base);
+void CheckCollisionsBullets(std::list<Enemy>* enemies, std::list<ParticleSystem>* particleSystems, std::list<Bullet>* bullets);
