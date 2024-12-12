@@ -51,7 +51,7 @@ void DrawAllButton(sf::RenderWindow* window, std::vector<Button>* buttons)
             (*buttons)[i].ButtonText.setFont((*buttons)[i].font);
             (*buttons)[i].ButtonText.setFillColor(sf::Color::Magenta);
             (*buttons)[i].ButtonText.setCharacterSize(40);
-            (*buttons)[i].ButtonText.setOrigin({ (*buttons)[i].shape.getSize().x / 2, (*buttons)[i].shape.getSize().y / 2 });
+            (*buttons)[i].ButtonText.setOrigin({ (*buttons)[i].ButtonText.getLocalBounds().getSize().x / 2, (*buttons)[i].ButtonText.getLocalBounds().getSize().y / 2 });
             (*buttons)[i].shape.setPosition((*buttons)[i].position);
             (*buttons)[i].shape.setOrigin({ (*buttons)[i].shape.getSize().x / 2, (*buttons)[i].shape.getSize().y / 2 });
             window->draw((*buttons)[i].shape);
@@ -67,6 +67,7 @@ Button CreateButton(std::string text, sf::Vector2f position, sf::RectangleShape 
     tempButton.shape = shape;
     tempButton.buttonState = state;
     tempButton.font.loadFromFile(GetFont() + "\\ARIAL.TTF");
+    //tempButton.ButtonText.setString("AAAAAAA");
     return tempButton;
 
 }
