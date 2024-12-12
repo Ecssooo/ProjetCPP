@@ -49,7 +49,7 @@ void DrawAllButton(sf::RenderWindow* window, std::vector<Button>* buttons)
         {
             (*buttons)[i].ButtonText.setPosition((*buttons)[i].position);
             (*buttons)[i].ButtonText.setFont((*buttons)[i].font);
-            (*buttons)[i].ButtonText.setFillColor(sf::Color::Magenta);
+            (*buttons)[i].ButtonText.setFillColor(sf::Color::Black);
             (*buttons)[i].ButtonText.setCharacterSize(40);
             (*buttons)[i].ButtonText.setOrigin({ (*buttons)[i].ButtonText.getLocalBounds().getSize().x / 2, (*buttons)[i].ButtonText.getLocalBounds().getSize().y / 2 });
             (*buttons)[i].shape.setPosition((*buttons)[i].position);
