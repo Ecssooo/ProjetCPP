@@ -161,6 +161,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Base.cpp" />
+    <ClCompile Include="Font.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="MathUtils.cpp" />
     <ClCompile Include="Menu.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="Base.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="ColisionManager.h" />
+    <ClInclude Include="Font.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Multiplayer.h" />

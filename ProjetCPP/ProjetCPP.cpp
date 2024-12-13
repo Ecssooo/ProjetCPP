@@ -10,6 +10,10 @@
 #include "ParticleSystem.h"
 #include "GameManager.h"
 #include "Menu.h"
+#include "Windows.h"
+
+
+
 
 int main(int argc, char* argv[])
 {
@@ -58,10 +62,15 @@ int main(int argc, char* argv[])
 
 
     //Setup UI
-    std::vector<Button> buttons {
-        {"None", {(float)window.getSize().x / 2,400}, sf::RectangleShape{{500,200}}, BUTTONSTATES::NONE},
-        {"Quit", {(float)window.getSize().x / 2,700}, sf::RectangleShape{{500,200}}, BUTTONSTATES::QUIT},
+    std::vector<Button> buttons{
+        CreateButton("None", sf::Vector2f {(float)window.getSize().x / 2,400}, sf::RectangleShape{{500,200}}, BUTTONSTATES::NONE),
+        CreateButton("Quit", sf::Vector2f {(float)window.getSize().x / 2,700}, sf::RectangleShape{{500,200}}, BUTTONSTATES::QUIT),
     };
+    std::vector<Button>::iterator buttonsIt = buttons.begin();
+    while (buttonsIt != buttons.end()) {
+        buttonsIt->Change(buttonsIt->buttonState);
+        buttonsIt++;
+    }
     
 
 
