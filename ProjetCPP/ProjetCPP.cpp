@@ -157,6 +157,7 @@ int main(int argc, char* argv[])
                 //Change State : switch game state when base destroyed;
                 if (!base.IsBaseAlive()) {
                     gameStates = GAMESTATES::START;
+                    waveCount = 0;
                     buttons[0].Change(BUTTONSTATES::NONE);
                     GamePause = true;
                 }
