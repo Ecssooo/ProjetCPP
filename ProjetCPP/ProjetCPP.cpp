@@ -77,6 +77,7 @@ int main(int argc, char* argv[])
     std::vector<Text> texts{
         CreateText("Appuyer sur espace ou la touche A pour vous mettre pret", sf::Vector2f {(float)window.getSize().x / 2,0}),
         CreateText("Wave ", sf::Vector2f {(float)window.getSize().x / 2,0}),
+        CreateText("GEOMERTY GUYS FOR REAL WAR", sf::Vector2f {(float)window.getSize().x / 2,(float)window.getSize().y / 3}),
     };
     
     //Game Loop
@@ -263,7 +264,11 @@ int main(int argc, char* argv[])
 
             //Draw menu
             DrawAllButton(&window, &buttons);
-            if(gameStates == GAMESTATES::START)DrawStartText(&window,texts[0]);
+            if(gameStates == GAMESTATES::START)
+            {
+                DrawStartText(&window,texts[0]);
+                DrawStartText(&window,texts[2]);
+            }
         }
         window.display();
     }
