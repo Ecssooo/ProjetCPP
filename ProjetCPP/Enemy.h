@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <list> 
+#include <list>
+#include <cmath>
 #include "MathUtils.h"
 
 struct Enemy
@@ -30,3 +31,4 @@ void SpawnEnemies(std::list<Enemy>* enemiesTotal, std::list<Enemy>* enemies, sf:
 Enemy CreateEnemy(Enemy* enemy, sf::Vector2f position);
 void MoveAllEnemies(std::list<Enemy>* enemies, sf::Vector2f basePos, std::vector<sf::Vector2f> playersPos, float deltatime);
 void DrawAllEnemies(std::list<Enemy>* enemies, sf::RenderWindow* window);
+void UpdateEnemiesDifficulty(std::list<Enemy>* enemies, int difficulty);

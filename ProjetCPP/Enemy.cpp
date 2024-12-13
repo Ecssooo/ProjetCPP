@@ -90,3 +90,14 @@ void Enemy::LookAt(sf::Vector2f direction)
 {
     shape.setRotation(IIM::ConvertVectorToDegree(direction, false, false) - 30);
 }
+
+void UpdateEnemiesDifficulty(std::list<Enemy>* enemies, int difficulty)
+{
+    std::list<Enemy>::iterator it = enemies->begin();
+    while(it != enemies->end())
+    {
+        (*it).speed *= pow(1.02f, difficulty);
+        (*it).spawnTimer *= pow(0.95f, difficulty);
+        it++;
+    }
+}

@@ -99,3 +99,13 @@ void Player::DrawHealth(sf::RenderWindow* window, int offset) {
         window->draw(hexa);
     }
 }
+
+void UpdateAllPlayersStats(std::vector<Player>* players, int ennemiesKills)
+{
+    std::vector<Player>::iterator it = players->begin();
+    while(it != players->end())
+    {
+        (*it).reloadTime *= pow(.9f, ennemiesKills);
+        it++;
+    }
+}

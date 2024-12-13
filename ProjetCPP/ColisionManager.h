@@ -9,4 +9,4 @@
 
 void CheckCollisionsPlayers(std::list<Enemy>* enemies, std::list<ParticleSystem>* particleSystems, std::vector<Player>* players);
 void CheckCollisionsBase(std::list<Enemy>* enemies, Base* base);
-void CheckCollisionsBullets(std::list<Enemy>* enemies, std::list<ParticleSystem>* particleSystems, std::list<Bullet>* bullets);
+void CheckCollisionsBullets(std::list<Enemy>* enemies, std::list<ParticleSystem>* particleSystems, std::list<Bullet>* bullets, int* ennemiesKills);

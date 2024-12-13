@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
     sf::RenderWindow window(sf::VideoMode(1920, 1080), "GW", sf::Style::Fullscreen);
     sf::Clock clock;
 
-    
+    int waveCount = 1;
     
     //Setup States
     GAMESTATES gameStates = GAMESTATES::START;
@@ -43,11 +43,13 @@ int main(int argc, char* argv[])
     };
     std::list<Enemy> enemiesTotal{};
 
+    int ennemiesKills = 1;
+
     //Setup Particles
     std::list<ParticleSystem> particleSystems {};
 
     //Setup Bullet
-    Bullet bullet {400, sf::CircleShape{2.5}, sf::Color {236, 240, 241, 255}};
+    Bullet bullet {400, sf::CircleShape{5}, sf::Color {236, 240, 241, 255}};
     std::list<Bullet> bulletsTotal{};
 
 
@@ -120,6 +122,7 @@ int main(int argc, char* argv[])
                 }
                 break;
             case(GAMESTATES::ROUNDINPROGRESS):
+                if(GamePause) break;
                 //Update timer : switch game state when ending; 
                 base.timerText.setString(std::to_string((int)(base.roundTimer - currentTimer)));
                 if(Timer(deltaTime, &currentTimer, base.roundTimer))
@@ -149,7 +152,7 @@ int main(int argc, char* argv[])
                 MoveAllEnemies(&enemiesTotal, base.position, playersPos, deltaTime);
                 CheckCollisionsPlayers(&enemiesTotal, &particleSystems, &players);
                 CheckCollisionsBase(&enemiesTotal, &base);
-                CheckCollisionsBullets(&enemiesTotal, &particleSystems, &bulletsTotal);
+                CheckCollisionsBullets(&enemiesTotal, &particleSystems, &bulletsTotal, &ennemiesKills);
 
                 //Change State : switch game state when base destroyed;
                 if (!base.IsBaseAlive()) {
@@ -160,6 +163,7 @@ int main(int argc, char* argv[])
             
                 break;
             case(GAMESTATES::REVIVE):
+                if(GamePause) break;
                 enemiesTotal.clear();
 
                 //Update timer : switch game state when ending;
@@ -168,6 +172,10 @@ int main(int argc, char* argv[])
                 {
                     gameStates = GAMESTATES::ROUNDINPROGRESS;
                     currentTimer = 0;
+                    waveCount++;
+                    UpdateEnemiesDifficulty(&enemiesTypes, waveCount * players.size());
+                    UpdateAllPlayersStats(&players, ennemiesKills);
+
                 }
 
                 //Revive dead players
