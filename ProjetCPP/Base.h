@@ -1,6 +1,7 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include "Windows.h"
+#include "Font.h"
 #include <iostream>
 
 

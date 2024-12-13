@@ -1,6 +1,9 @@
 #pragma once
 #include <list>
 #include <SFML/Graphics.hpp>
+#include "MathUtils.h"
+#include "Font.h"
+#include <iostream>
 
 enum class BUTTONSTATES
 {
@@ -24,5 +27,17 @@ struct Button
     bool OnClick(sf::RenderWindow* window);
 };
 
+struct Text
+{
+    std::string text;
+    sf::Vector2f position;
+    sf::Font font;
+    sf::Text ShowText;
+};
+
 void DrawAllButton(sf::RenderWindow* window, std::vector<Button>* buttons);
 Button CreateButton(std::string text, sf::Vector2f position, sf::RectangleShape shape, BUTTONSTATES state);
+
+Text CreateText(std::string text, sf::Vector2f position);
+void DrawStartText(sf::RenderWindow* window, Text text);
+void DrawWaveText(sf::RenderWindow* window, Text text, int wave);

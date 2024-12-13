@@ -1,7 +1,5 @@
 #include "Menu.h"
-#include "MathUtils.h"
-#include "Font.h"
-#include <iostream>
+
 
 
 void Button::Change(BUTTONSTATES newState)
@@ -66,8 +64,38 @@ Button CreateButton(std::string text, sf::Vector2f position, sf::RectangleShape 
     tempButton.position = position;
     tempButton.shape = shape;
     tempButton.buttonState = state;
-    tempButton.font.loadFromFile(GetFont() + "\\ARIAL.TTF");
+    tempButton.font.loadFromFile(GetFont());
     //tempButton.ButtonText.setString("AAAAAAA");
     return tempButton;
 
+}
+
+Text CreateText(std::string text, sf::Vector2f position) {
+    Text tempText;
+    tempText.text = text;
+    tempText.position = position;
+    tempText.font.loadFromFile(GetFont());
+    return tempText;
+}
+
+void DrawStartText(sf::RenderWindow* window, Text text)
+{
+    text.ShowText.setFont(text.font);
+    text.ShowText.setString(text.text);
+    text.ShowText.setFillColor(sf::Color::White);
+    text.ShowText.setCharacterSize(50);
+    text.ShowText.setOrigin({ text.ShowText.getLocalBounds().getSize().x / 2, 0});
+    text.ShowText.setPosition(text.position);
+    window->draw(text.ShowText);
+}
+
+void DrawWaveText(sf::RenderWindow* window, Text text, int wave)
+{
+    text.ShowText.setFont(text.font);
+    text.ShowText.setString(text.text + std::to_string(wave));
+    text.ShowText.setOrigin({ text.ShowText.getLocalBounds().getSize().x / 2, 0});
+    text.ShowText.setPosition(text.position);
+    text.ShowText.setFillColor(sf::Color::White);
+    text.ShowText.setCharacterSize(50);
+    window->draw(text.ShowText);
 }

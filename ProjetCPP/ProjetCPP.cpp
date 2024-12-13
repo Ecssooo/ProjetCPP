@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
     sf::RenderWindow window(sf::VideoMode(1920, 1080), "GW", sf::Style::Fullscreen);
     sf::Clock clock;
 
-    int waveCount = 1;
+    int waveCount = 0;
     
     //Setup States
     GAMESTATES gameStates = GAMESTATES::START;
@@ -35,11 +35,11 @@ int main(int argc, char* argv[])
     
     //Setup Enemies
     std::list<Enemy> enemiesTypes{
-        Enemy{100, 1, false, sf::CircleShape {15, 3}, sf::Color{227,41,20}, 2.75f },
-        Enemy{100, 1, true, sf::CircleShape {15, 3}, sf::Color{251,1,1}, 4.1f },
-        Enemy{150, 2, false, sf::CircleShape {15, 4}, sf::Color{199,56,19}, 5.5f } ,
+        Enemy{100, 1, false, sf::CircleShape {15, 3}, sf::Color{227,41,20}, 3.75f },
+        Enemy{100, 1, true, sf::CircleShape {15, 3}, sf::Color{251,1,1}, 5.1f },
+        Enemy{150, 2, false, sf::CircleShape {15, 4}, sf::Color{199,56,19}, 7.2f } ,
         Enemy{300, 0, true, sf::CircleShape {5}, sf::Color{249,70,9}, 1.3f },
-        Enemy{50, 40, false, sf::CircleShape {175, 12}, sf::Color{165,21,13}, 10.0f }
+        Enemy{75, 40, false, sf::CircleShape {175, 12}, sf::Color{165,21,13}, 15.0f }
     };
     std::list<Enemy> enemiesTotal{};
 
@@ -74,12 +74,16 @@ int main(int argc, char* argv[])
         buttonsIt++;
     }
     
-
-
+    std::vector<Text> texts{
+        CreateText("Appuyer sur espace ou la touche A pour vous mettre pret", sf::Vector2f {(float)window.getSize().x / 2,0}),
+        CreateText("Wave ", sf::Vector2f {(float)window.getSize().x / 2,0}),
+    };
+    
     //Game Loop
     while (window.isOpen())
     {
         float deltaTime = clock.restart().asSeconds();
+        window.clear();
 
         //Manage function for specific state;
         switch (gameStates)
@@ -88,7 +92,7 @@ int main(int argc, char* argv[])
                 gameStates = GAMESTATES::START;
                 break;
             case(GAMESTATES::START):
-
+                
                 //Check player ready
                 sf::Event event;
                 if (GetNbJostick(JosticksID) > 0)
@@ -111,7 +115,7 @@ int main(int argc, char* argv[])
                         playersReady++;
                     }
                 }
-
+                    
                 //Change State : switch game state when all player ready;
                 if (playersReady == players.size())
                 {
@@ -132,6 +136,7 @@ int main(int argc, char* argv[])
                 }
 
                 //Make player shoot
+            
                 for (int i = 0; i < players.size(); i++) {
                     if(players[i].playerStates == PLAYERSTATES::ALIVE)
                     {
@@ -153,6 +158,7 @@ int main(int argc, char* argv[])
                 CheckCollisionsPlayers(&enemiesTotal, &particleSystems, &players);
                 CheckCollisionsBase(&enemiesTotal, &base);
                 CheckCollisionsBullets(&enemiesTotal, &particleSystems, &bulletsTotal, &ennemiesKills);
+            
 
                 //Change State : switch game state when base destroyed;
                 if (!base.IsBaseAlive()) {
@@ -174,7 +180,7 @@ int main(int argc, char* argv[])
                     gameStates = GAMESTATES::ROUNDINPROGRESS;
                     currentTimer = 0;
                     waveCount++;
-                    UpdateEnemiesDifficulty(&enemiesTypes, waveCount * players.size());
+                    UpdateEnemiesDifficulty(&enemiesTypes, waveCount + players.size());
                     UpdateAllPlayersStats(&players, ennemiesKills);
 
                 }
@@ -223,14 +229,13 @@ int main(int argc, char* argv[])
             UpdateAllParticleSystem(&particleSystems, &window, deltaTime);
 
             //Draw game
-            window.clear();
             DrawAllEnemies(&enemiesTotal, &window);
             DrawBase(&base, &window);
             DrawBaseLife(&base, &window);
             DrawAllBullets(&window, &bulletsTotal);
             DrawAllParticleSystem(&window, &particleSystems);
             DrawAllPlayers(&players, &window);
-            
+            DrawWaveText(&window, texts[1], waveCount);
         }
         //Manage function in menu
         else {
@@ -257,8 +262,8 @@ int main(int argc, char* argv[])
             }
 
             //Draw menu
-            window.clear();
             DrawAllButton(&window, &buttons);
+            if(gameStates == GAMESTATES::START)DrawStartText(&window,texts[0]);
         }
         window.display();
     }

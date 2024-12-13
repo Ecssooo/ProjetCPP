@@ -1,19 +1,5 @@
 #include "Base.h"
 
-std::string getAppPath() {
-	char cExeFilePath[256];
-	GetModuleFileNameA(NULL, cExeFilePath, 256);
-	std::string exeFilePath = cExeFilePath;
-	int exeNamePos = exeFilePath.find_last_of("\\/");
-	std::string appPath = exeFilePath.substr(0, exeNamePos + 1);
-	return appPath;
-}
-
-std::string getAssetsPath() {
-	std::string basePath = getAppPath();
-	basePath += "\Assets";
-	return basePath;
-}
 
 Base CreateBase(sf::RenderWindow* window, int hp, float reviveTimer, float roundTimer) {
 	Base base;
@@ -21,7 +7,7 @@ Base CreateBase(sf::RenderWindow* window, int hp, float reviveTimer, float round
 	base.hp = hp;
 	base.revivePlayerTimer = reviveTimer;
 	base.roundTimer = roundTimer;
-	base.font.loadFromFile(getAssetsPath() + "\\ARIAL.TTF");
+	base.font.loadFromFile(GetFont());
 	base.timerText.setFont(base.font);
 	base.timerText.setString(std::to_string((int)base.roundTimer));
 	base.timerText.setCharacterSize(40);

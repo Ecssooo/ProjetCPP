@@ -17,7 +17,7 @@ void MoveAllPlayers(std::vector<Player>* players, std::vector<sf::Vector2f> dire
 void DrawAllPlayers(std::vector<Player>* players, sf::RenderWindow* window)
 {
     for (int i = 0; i < (*players).size(); i++) {
-        if ((*players)[i].playerStates != PLAYERSTATES::DEAD)
+        if ((*players)[i].playerStates == PLAYERSTATES::ALIVE)
         {
             window->draw((*players)[i].shape);
             (*players)[i].DrawHealth(window, i);

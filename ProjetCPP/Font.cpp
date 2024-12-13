@@ -7,6 +7,5 @@ std::string GetFont() {
     std::string exeFilePath = cExeFilePath;
     int exeNamePos = exeFilePath.find_last_of("\\/");
     std::string appPath = exeFilePath.substr(0, exeNamePos + 1);
-    std::cout << appPath + "\Assets\\ARIAL.TTF" << std::endl;
-    return appPath + "\\Assets";
+    return appPath + "\Assets\\ARIAL.TTF";
 }
