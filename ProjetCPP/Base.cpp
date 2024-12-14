@@ -2,27 +2,29 @@
 
 
 Base CreateBase(sf::RenderWindow* window, int hp, float reviveTimer, float roundTimer) {
-	Base base;
-	base.maxHp = hp;
-	base.hp = hp;
-	base.revivePlayerTimer = reviveTimer;
-	base.roundTimer = roundTimer;
+	Base base {hp, hp,roundTimer,reviveTimer};
+
+	//Text timer
 	base.font.loadFromFile(GetFont());
 	base.timerText.setFont(base.font);
 	base.timerText.setString(std::to_string((int)base.roundTimer));
 	base.timerText.setCharacterSize(40);
 	base.timerText.setFillColor(sf::Color::Magenta);
+
+	//Shape
 	base.shape.setPointCount(8);
 	base.shape.setRadius(75);
 	base.shape.setOrigin(sf::Vector2f{ base.shape.getRadius(), base.shape.getRadius() });
+	base.color = sf::Color::White;
+	base.shape.setFillColor(base.color);
+
+	//Position
 	float x = rand() % (int)(window->getSize().x - base.shape.getRadius() * 2) + base.shape.getRadius();
 	float y = rand() % (int)(window->getSize().y - (base.shape.getRadius() * 2 + window->getSize().y / 20)) + base.shape.getRadius();
 	base.position = {  x, y};
 	sf::Vector2f offset = { (float)(base.timerText.getCharacterSize() / 2), (float)((base.timerText.getCharacterSize() / 2) + 5) };
 	base.timerText.setPosition(base.position - offset);
 	base.shape.setPosition(base.position);
-	base.color = sf::Color::White;
-	base.shape.setFillColor(base.color);
 
 	return base;
 }
@@ -59,7 +61,7 @@ void Base::BaseRevive(sf::RenderWindow* window) {
 	this->hp = this->maxHp;
 	float x = rand() % (int)(window->getSize().x - this->shape.getRadius() * 2) + this->shape.getRadius();
 	float y = rand() % (int)(window->getSize().y - (this->shape.getRadius() * 2 + window->getSize().y / 20)) + this->shape.getRadius();
-	this->position = {  x, y};
+	this->position = {x, y};
 	this->shape.setPosition(this->position);
 	sf::Vector2f offset = { (float)(this->timerText.getCharacterSize() / 2), (float)((this->timerText.getCharacterSize() / 2) + 5) };
 	this->timerText.setPosition(this->position - offset);
