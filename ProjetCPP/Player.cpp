@@ -5,7 +5,10 @@ Player CreatePlayer(int id, int hp, float speed, sf::CircleShape shape, sf::Vect
     shape.setPosition(pos);
     shape.setOrigin(shape.getRadius(), shape.getRadius());
     shape.setFillColor(color);
-    return Player{id, hp, speed,shape, color ,pos, sf::Vector2f{0,0}, bullet, reloadTime, reloadTime};
+    
+    Player newPlayer {id, hp, speed,shape, color ,pos, sf::Vector2f{0,0}, bullet, reloadTime};
+    newPlayer.reloadTime = newPlayer.startReloadTime;
+    return newPlayer;
 }
 
 void MoveAllPlayers(std::vector<Player>* players, std::vector<sf::Vector2f> directions, sf::RenderWindow* window, float deltatime)

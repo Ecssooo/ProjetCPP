@@ -22,7 +22,8 @@ void SpawnEnemies(std::list<Enemy>* enemies, std::list<Enemy>* enemiesType, sf::
 Enemy CreateEnemy(Enemy* enemy, sf::Vector2f position)
 {
     Enemy newEnemy = (*enemy);
-
+    newEnemy.spawnTime = newEnemy.startSpawnTimer;
+    newEnemy.speed = newEnemy.startSpeed;
     newEnemy.position = position;
     newEnemy.shape.setFillColor(enemy->color);
     newEnemy.shape.setPosition(position);

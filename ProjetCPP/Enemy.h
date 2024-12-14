@@ -6,7 +6,6 @@
 
 struct Enemy
 {
-    float speed;
     float startSpeed;
     int attack;
     bool targetPlayers = false;
@@ -15,14 +14,14 @@ struct Enemy
     sf::CircleShape shape;
     sf::Color color;
 
-    float spawnTimer;
     float startSpawnTimer;
-    float spawnTime{ 0 };
 
     sf::Vector2f position;
     sf::Vector2f direction;
 
-
+    float speed = 0;
+    float spawnTimer = 0;
+    float spawnTime{ 0 };
 
     void Move(sf::Vector2f direction, float deltatime);
     void LookAt(sf::Vector2f direction);

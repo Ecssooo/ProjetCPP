@@ -35,11 +35,11 @@ int main(int argc, char* argv[])
     
     //Setup Enemies
     std::list<Enemy> enemiesTypes{
-        Enemy{100,100, 1, false, sf::CircleShape {15, 3}, sf::Color{227,41,20}, 3.75f, 3.75f },
-        Enemy{100, 100, 1, true, sf::CircleShape {15, 3}, sf::Color{251,1,1}, 5.1f, 7.2f},
-        Enemy{150, 150, 2, false, sf::CircleShape {15, 4}, sf::Color{199,56,19}, 7.2f, 7.2f } ,
-        Enemy{300,300, 0, true, sf::CircleShape {5}, sf::Color{249,70,9}, 1.3f, 1.3f },
-        Enemy{75, 75, 40, false, sf::CircleShape {175, 12}, sf::Color{165,21,13}, 15.0f, 15.0f}
+        Enemy{100, 1, false, sf::CircleShape {15, 3}, sf::Color{227,41,20}, 3.75f  },
+        Enemy{ 100, 1, true, sf::CircleShape {15, 3}, sf::Color{251,1,1}, 5.1f },
+        Enemy{ 150, 2, false, sf::CircleShape {15, 4}, sf::Color{199,56,19}, 7.2f  } ,
+        Enemy{300, 0, true, sf::CircleShape {5}, sf::Color{249,70,9}, 1.3f},
+        Enemy{ 75, 40, false, sf::CircleShape {175, 12}, sf::Color{165,21,13}, 15.0f }
     };
     std::list<Enemy> enemiesTotal{};
 
