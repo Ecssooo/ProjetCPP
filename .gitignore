@@ -41,4 +41,6 @@ CMakeUserPresets.json
 
 external/*
 ProjetCPP/x64/*
-x64/*
+.dll
+ProjetCPP.pdb
+.exe
