@@ -28,6 +28,7 @@ struct Player
     //Bullet params
     Bullet* bullet;
     float reloadTime;
+    float startReloadTime;
     float shootSpeedTimer = 0;
     PLAYERSTATES playerStates = PLAYERSTATES::NOTREADY;
     

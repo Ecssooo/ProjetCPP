@@ -7,6 +7,7 @@
 struct Enemy
 {
     float speed;
+    float startSpeed;
     int attack;
     bool targetPlayers = false;
 
@@ -15,6 +16,7 @@ struct Enemy
     sf::Color color;
 
     float spawnTimer;
+    float startSpawnTimer;
     float spawnTime{ 0 };
 
     sf::Vector2f position;

@@ -35,15 +35,15 @@ int main(int argc, char* argv[])
     
     //Setup Enemies
     std::list<Enemy> enemiesTypes{
-        Enemy{100, 1, false, sf::CircleShape {15, 3}, sf::Color{227,41,20}, 3.75f },
-        Enemy{100, 1, true, sf::CircleShape {15, 3}, sf::Color{251,1,1}, 5.1f },
-        Enemy{150, 2, false, sf::CircleShape {15, 4}, sf::Color{199,56,19}, 7.2f } ,
-        Enemy{300, 0, true, sf::CircleShape {5}, sf::Color{249,70,9}, 1.3f },
-        Enemy{75, 40, false, sf::CircleShape {175, 12}, sf::Color{165,21,13}, 15.0f }
+        Enemy{100,100, 1, false, sf::CircleShape {15, 3}, sf::Color{227,41,20}, 3.75f, 3.75f },
+        Enemy{100, 100, 1, true, sf::CircleShape {15, 3}, sf::Color{251,1,1}, 5.1f, 7.2f},
+        Enemy{150, 150, 2, false, sf::CircleShape {15, 4}, sf::Color{199,56,19}, 7.2f, 7.2f } ,
+        Enemy{300,300, 0, true, sf::CircleShape {5}, sf::Color{249,70,9}, 1.3f, 1.3f },
+        Enemy{75, 75, 40, false, sf::CircleShape {175, 12}, sf::Color{165,21,13}, 15.0f, 15.0f}
     };
     std::list<Enemy> enemiesTotal{};
 
-    int ennemiesKills = 1;
+    int enemiesKills = 1;
 
     //Setup Particles
     std::list<ParticleSystem> particleSystems {};
@@ -78,6 +78,7 @@ int main(int argc, char* argv[])
         CreateText("Appuyer sur espace ou la touche A pour vous mettre pret", sf::Vector2f {(float)window.getSize().x / 2,0}),
         CreateText("Wave ", sf::Vector2f {(float)window.getSize().x / 2,0}),
         CreateText("GEOMERTY GUYS FOR REAL WAR", sf::Vector2f {(float)window.getSize().x / 2,(float)window.getSize().y / 3}),
+        CreateText("Enemies killed : ", sf::Vector2f {(float)window.getSize().x / 2, 50}),
     };
     
     //Game Loop
@@ -158,7 +159,7 @@ int main(int argc, char* argv[])
                 MoveAllEnemies(&enemiesTotal, base.position, playersPos, deltaTime);
                 CheckCollisionsPlayers(&enemiesTotal, &particleSystems, &players);
                 CheckCollisionsBase(&enemiesTotal, &base);
-                CheckCollisionsBullets(&enemiesTotal, &particleSystems, &bulletsTotal, &ennemiesKills);
+                CheckCollisionsBullets(&enemiesTotal, &particleSystems, &bulletsTotal, &enemiesKills);
             
 
                 //Change State : switch game state when base destroyed;
@@ -182,7 +183,7 @@ int main(int argc, char* argv[])
                     currentTimer = 0;
                     waveCount++;
                     UpdateEnemiesDifficulty(&enemiesTypes, waveCount + players.size());
-                    UpdateAllPlayersStats(&players, ennemiesKills);
+                    UpdateAllPlayersStats(&players, enemiesKills);
 
                 }
 
@@ -237,6 +238,7 @@ int main(int argc, char* argv[])
             DrawAllParticleSystem(&window, &particleSystems);
             DrawAllPlayers(&players, &window);
             DrawWaveText(&window, texts[1], waveCount);
+            DrawWaveText(&window, texts[3], enemiesKills - 1);
         }
         //Manage function in menu
         else {

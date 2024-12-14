@@ -5,7 +5,7 @@ Player CreatePlayer(int id, int hp, float speed, sf::CircleShape shape, sf::Vect
     shape.setPosition(pos);
     shape.setOrigin(shape.getRadius(), shape.getRadius());
     shape.setFillColor(color);
-    return Player{id, hp, speed,shape, color ,pos, sf::Vector2f{0,0}, bullet, reloadTime};
+    return Player{id, hp, speed,shape, color ,pos, sf::Vector2f{0,0}, bullet, reloadTime, reloadTime};
 }
 
 void MoveAllPlayers(std::vector<Player>* players, std::vector<sf::Vector2f> directions, sf::RenderWindow* window, float deltatime)
@@ -105,7 +105,7 @@ void UpdateAllPlayersStats(std::vector<Player>* players, int ennemiesKills)
     std::vector<Player>::iterator it = players->begin();
     while(it != players->end())
     {
-        (*it).reloadTime *= pow(.9f, ennemiesKills);
+        (*it).reloadTime = (*it).startReloadTime * pow(.996f, ennemiesKills);
         it++;
     }
 }

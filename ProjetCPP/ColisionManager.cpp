@@ -51,7 +51,7 @@ void CheckCollisionsBullets(std::list<Enemy>* enemies, std::list<ParticleSystem>
                 if ((*it).Touch(with->position, with->shape.getRadius())) {
                     particleSystems->push_back(CreatePrefabSystem((*it).color, (*it).position));
                     it = enemies->erase(it);
-                    ennemiesKills++;
+                    (*ennemiesKills)++;
                     bullets->erase(with);
                     break;
                 }

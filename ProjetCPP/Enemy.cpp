@@ -27,7 +27,7 @@ Enemy CreateEnemy(Enemy* enemy, sf::Vector2f position)
     newEnemy.shape.setFillColor(enemy->color);
     newEnemy.shape.setPosition(position);
     newEnemy.shape.setOrigin(enemy->shape.getRadius(), enemy->shape.getRadius());
-
+    
     return newEnemy;
 }
 
@@ -96,8 +96,8 @@ void UpdateEnemiesDifficulty(std::list<Enemy>* enemies, int difficulty)
     std::list<Enemy>::iterator it = enemies->begin();
     while(it != enemies->end())
     {
-        (*it).speed *= pow(1.02f, difficulty);
-        (*it).spawnTimer *= pow(0.95f, difficulty);
+        (*it).speed = (*it).startSpeed * pow(1.02f, difficulty);
+        (*it).spawnTimer = (*it).startSpawnTimer * pow(0.95f, difficulty);
         it++;
     }
 }
